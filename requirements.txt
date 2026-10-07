@@ -2,3 +2,4 @@ Flask
 Werkzeug
 python-dotenv
 Flask-WTF
+gunicorn
