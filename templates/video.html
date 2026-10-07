@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ title }} - Blockrealm</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 50% 10%,
+                    #30234a 0%,
+                    #15151b 45%,
+                    #07040c 100%
+                );
+
+            color: #f3f1f8;
+
+            font-family: 'VT323', monospace;
+
+            padding: 20px;
+        }
+
+
+        .container {
+
+            max-width: 1100px;
+
+            margin: auto;
+        }
+
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .logo {
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 18px;
+
+            color: #6bdc3b;
+
+            text-shadow:
+                3px 3px 0 #07040c;
+        }
+
+
+        .back {
+
+            display: inline-block;
+
+            padding: 12px 16px;
+
+            background: #1b1428;
+
+            border: 3px solid #3d2d63;
+
+            color: #f3f1f8;
+
+            text-decoration: none;
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 9px;
+
+            box-shadow:
+                4px 4px 0 #07040c;
+        }
+
+
+        .back:hover {
+
+            border-color: #ffcc33;
+
+            color: #ffcc33;
+        }
+
+
+        .video-panel {
+
+            background: #1b1428;
+
+            border: 4px solid #3d2d63;
+
+            box-shadow:
+                8px 8px 0 #07040c;
+
+            padding: 20px;
+        }
+
+
+        .title {
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 16px;
+
+            color: #ffcc33;
+
+            margin-bottom: 20px;
+
+            line-height: 1.7;
+        }
+
+
+        video {
+
+            width: 100%;
+
+            max-height: 70vh;
+
+            display: block;
+
+            background: #000;
+
+            border: 4px solid #07040c;
+        }
+
+
+        .info {
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            background: #07040c;
+
+            border-left: 4px solid #6bdc3b;
+
+            font-size: 20px;
+
+            color: #b9b2cc;
+        }
+
+
+        .like-area {
+
+            margin-top: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .like-button {
+
+            border: 3px solid #3d2d63;
+
+            background: #07040c;
+
+            color: #f3f1f8;
+
+            padding: 14px 20px;
+
+            cursor: pointer;
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 10px;
+
+            box-shadow:
+                4px 4px 0 #000;
+        }
+
+
+        .like-button:hover {
+
+            border-color: #ff4f64;
+
+            color: #ff4f64;
+        }
+
+
+        .like-count {
+
+            font-size: 24px;
+
+            color: #ff4f64;
+        }
+
+
+        .logout {
+
+            margin-top: 25px;
+
+            display: inline-block;
+
+            padding: 12px 16px;
+
+            background: #7c1c10;
+
+            border: 3px solid #ff7a5f;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 9px;
+
+            box-shadow:
+                4px 4px 0 #07040c;
+        }
+
+
+        .logout:hover {
+
+            background: #e0452f;
+        }
+
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back {
+                text-align: center;
+            }
+
+            .logo {
+                text-align: center;
+                font-size: 14px;
+            }
+
+            .video-panel {
+                padding: 12px;
+            }
+
+            .title {
+                font-size: 12px;
+            }
+
+        }
+	.comments-section {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: #07040c;
+
+            border: 3px solid #3d2d63;
+
+            box-shadow:
+                5px 5px 0 #000;
+        }
+
+
+        .comments-title {
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 12px;
+
+            color: #ffcc33;
+
+            margin-bottom: 20px;
+        }
+
+
+        .comment-form {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .comment-form textarea {
+
+            width: 100%;
+
+            min-height: 90px;
+
+            resize: vertical;
+
+            padding: 12px;
+
+            background: #1b1428;
+
+            border: 3px solid #3d2d63;
+
+            color: white;
+
+            font-family: 'VT323', monospace;
+
+            font-size: 20px;
+
+            outline: none;
+        }
+
+
+        .comment-form textarea:focus {
+
+            border-color: #6bdc3b;
+        }
+
+
+        .comment-form button {
+
+            align-self: flex-start;
+
+            padding: 12px 16px;
+
+            background: #6bdc3b;
+
+            border: 3px solid #07040c;
+
+            color: #07040c;
+
+            cursor: pointer;
+
+            font-family:
+                'Press Start 2P',
+                monospace;
+
+            font-size: 9px;
+
+            box-shadow:
+                4px 4px 0 #000;
+        }
+
+
+        .comment-form button:hover {
+
+            background: #ffcc33;
+        }
+
+
+        .comment-list {
+
+            margin-top: 25px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .comment {
+
+            padding: 14px;
+
+            background: #1b1428;
+
+            border-left: 4px solid #6bdc3b;
+
+        }
+
+
+        .comment-user {
+
+            color: #ffcc33;
+
+            font-size: 20px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .comment-text {
+
+            color: #f3f1f8;
+
+            font-size: 20px;
+
+            word-wrap: break-word;
+        }
+
+
+        .comment-time {
+
+            margin-top: 7px;
+
+            color: #777080;
+
+            font-size: 15px;
+        }
+
+
+        .no-comments {
+
+            color: #777080;
+
+            font-size: 20px;
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <div class="logo">
+            BLOCKREALM
+        </div>
+
+
+        <a class="back" href="/">
+            ← HOME
+        </a>
+
+    </div>
+
+
+
+    <div class="video-panel">
+
+
+        <div class="title">
+            🎥 {{ title }}
+        </div>
+
+
+        <video controls>
+
+            <source
+                src="/videos/{{ filename }}"
+                type="video/mp4">
+
+            Your browser does not support video playback.
+
+        </video>
+
+
+
+        <div class="info">
+
+            FILE:
+            {{ filename }}
+
+        </div>
+
+
+
+        <div class="like-area">
+
+
+            <form
+    method="POST"
+    action="/like/{{ filename }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div style="color:yellow; font-size:22px;">
+    DEBUG VIDEO ID: {{ video_id }}
+</div>
+
+    <button
+        class="like-button"
+        type="submit">
+
+        {% if video_id in user_likes %}
+
+            ❤️ UNLIKE
+
+        {% else %}
+
+            🤍 LIKE
+
+        {% endif %}
+
+    </button>
+
+</form>
+
+
+            <div class="like-count">
+
+                ❤️
+                {{ like_counts.get(video_id, 0) }}
+
+                Likes
+
+            </div>
+
+
+        </div>
+
+ 	<div class="comments-section">
+
+            <div class="comments-title">
+                💬 COMMENTS
+            </div>
+
+            <form
+                method="POST"
+                action="/comment/{{ filename }}"
+                class="comment-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <textarea
+                    name="comment"
+                    placeholder="Write a comment..."
+                    required
+                    maxlength="500"></textarea>
+
+                <button type="submit">
+                    POST COMMENT
+                </button>
+
+            </form>
+
+
+            <div class="comment-list">
+
+                {% if comments %}
+
+                    {% for comment in comments %}
+
+                        <div class="comment">
+
+                            <div class="comment-user">
+                                👤 {{ comment["name"] }}
+                            </div>
+
+                            <div class="comment-text">
+                                {{ comment["comment"] }}
+                            </div>
+
+                            <div class="comment-time">
+                                {{ comment["created_at"] }}
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="no-comments">
+                        No comments yet...
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <a
+            class="logout"
+            href="/logout">
+
+            LOGOUT
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+// =========================
+// AJAX COMMENT — NO PAGE RELOAD
+// =========================
+
+document.querySelectorAll(".comment-form").forEach(form => {
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const textarea = form.querySelector(
+            'textarea[name="comment"]'
+        );
+
+        const button = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        const text = textarea.value.trim();
+
+        if (!text) {
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+
+            const formData = new FormData(form);
+
+            const response = await fetch(
+                form.action,
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Comment request failed");
+            }
+
+            const data = await response.json();
+
+            const commentList =
+                document.querySelector(".comment-list");
+
+            const noComments =
+                commentList.querySelector(".no-comments");
+
+            if (noComments) {
+                noComments.remove();
+            }
+
+            const comment =
+                document.createElement("div");
+
+            comment.className = "comment";
+
+            const user =
+                document.createElement("div");
+
+            user.className = "comment-user";
+            user.textContent = "👤 " + data.name;
+
+            const commentText =
+                document.createElement("div");
+
+            commentText.className = "comment-text";
+            commentText.textContent = data.comment;
+
+            const time =
+                document.createElement("div");
+
+            time.className = "comment-time";
+            time.textContent = data.created_at;
+
+            comment.appendChild(user);
+            comment.appendChild(commentText);
+            comment.appendChild(time);
+
+            commentList.prepend(comment);
+
+            textarea.value = "";
+
+        } catch (error) {
+
+            console.error(
+                "Comment error:",
+                error
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

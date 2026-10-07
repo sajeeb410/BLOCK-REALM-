@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Edit Profile – Minecraft Reels</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --dirt:#5b3a1e;
+    --grass:#5da130;
+    --grass-hi:#7bc043;
+    --stone:#8b8b8b;
+    --slate:#2b2b2f;
+    --hi:#fff;
+    --lo:#373737;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100dvh;
+    background:
+        linear-gradient(
+            var(--grass) 0 56px,
+            transparent 56px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            #6b4423 0 32px,
+            #5b3a1e 32px 64px
+        );
+
+    background-attachment:fixed;
+
+    color:#fff;
+
+    font-family:'VT323',monospace;
+    font-size:22px;
+
+    padding:
+        calc(env(safe-area-inset-top,0px) + 16px)
+        14px
+        calc(env(safe-area-inset-bottom,0px) + 40px);
+}
+
+.wrap{
+    max-width:520px;
+    margin:0 auto;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.logo{
+    font-family:'Press Start 2P',monospace;
+    font-size:11px;
+    text-shadow:2px 2px 0 #000;
+}
+
+.top a{
+    color:#fff;
+    text-decoration:none;
+    text-shadow:2px 2px 0 #000;
+    font-size:22px;
+}
+
+.panel{
+    background:var(--slate);
+
+    padding:18px;
+
+    box-shadow:
+        0 0 0 4px #000,
+        inset 3px 3px 0 #55555a,
+        inset -3px -3px 0 #151518;
+}
+
+h1{
+    font-family:'Press Start 2P',monospace;
+    font-size:14px;
+
+    text-shadow:2px 2px 0 #000;
+
+    line-height:1.5;
+
+    margin-bottom:20px;
+}
+
+.section{
+    margin-top:22px;
+    padding-top:18px;
+
+    border-top:3px solid #111;
+}
+
+.section-title{
+    font-family:'Press Start 2P',monospace;
+    font-size:10px;
+
+    color:var(--grass-hi);
+
+    text-shadow:2px 2px 0 #000;
+
+    margin-bottom:16px;
+}
+
+.avatar-row{
+    display:flex;
+    gap:16px;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.avatar{
+    width:96px;
+    height:96px;
+
+    flex:none;
+
+    background:var(--stone);
+
+    box-shadow:
+        0 0 0 3px #000,
+        inset 3px 3px 0 var(--hi),
+        inset -3px -3px 0 var(--lo);
+
+    display:grid;
+    place-items:center;
+
+    overflow:hidden;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    image-rendering:auto;
+}
+
+.avatar span{
+    font-family:'Press Start 2P',monospace;
+    font-size:28px;
+
+    color:#fff;
+
+    text-shadow:3px 3px 0 #000;
+}
+
+.avatar-info{
+    flex:1;
+}
+
+.avatar-name{
+    font-family:'Press Start 2P',monospace;
+    font-size:10px;
+
+    line-height:1.6;
+
+    word-break:break-word;
+}
+
+.avatar-hint{
+    color:#999;
+    font-size:19px;
+
+    margin-top:6px;
+}
+
+label{
+    display:block;
+
+    margin:16px 0 6px;
+
+    color:#ddd;
+}
+
+.hint{
+    color:#999;
+    font-size:19px;
+
+    margin-top:4px;
+}
+
+input[type=text],
+input[type=number],
+textarea{
+    width:100%;
+
+    background:#000;
+    color:#fff;
+
+    border:0;
+
+    padding:10px 12px;
+
+    font:inherit;
+
+    box-shadow:
+        0 0 0 3px #555,
+        inset 3px 3px 0 #111;
+
+    border-radius:0;
+}
+
+textarea{
+    resize:vertical;
+
+    min-height:100px;
+
+    line-height:1.1;
+}
+
+input:focus-visible,
+textarea:focus-visible{
+    outline:3px solid var(--grass-hi);
+    outline-offset:2px;
+}
+
+input[type=file]{
+    width:100%;
+
+    background:#000;
+    color:#fff;
+
+    padding:10px;
+
+    border:3px solid #555;
+
+    font-family:'VT323',monospace;
+    font-size:20px;
+}
+
+input[type=file]::file-selector-button{
+    background:var(--grass);
+
+    color:#fff;
+
+    border:3px solid #000;
+
+    padding:8px 12px;
+
+    font-family:'VT323',monospace;
+    font-size:20px;
+
+    cursor:pointer;
+
+    margin-right:10px;
+}
+
+.buttons{
+    display:flex;
+
+    gap:12px;
+
+    margin-top:24px;
+}
+
+.btn{
+    flex:1;
+
+    border:0;
+
+    padding:13px 10px;
+
+    font-family:'VT323',monospace;
+    font-size:22px;
+
+    cursor:pointer;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    color:#fff;
+
+    box-shadow:
+        0 0 0 3px #000,
+        inset 3px 3px 0 rgba(255,255,255,.25),
+        inset -3px -3px 0 rgba(0,0,0,.35);
+}
+
+.save{
+    background:var(--grass);
+}
+
+.save:hover{
+    background:var(--grass-hi);
+}
+
+.cancel{
+    background:#555;
+}
+
+.cancel:hover{
+    background:#666;
+}
+
+.upload{
+    width:100%;
+
+    margin-top:15px;
+
+    background:#6b4423;
+}
+
+.upload:hover{
+    background:#80532a;
+}
+
+.footer{
+    text-align:center;
+
+    color:#777;
+
+    font-size:18px;
+
+    margin-top:22px;
+
+    text-shadow:1px 1px 0 #000;
+}
+
+@media(max-width:420px){
+
+    .avatar-row{
+        align-items:flex-start;
+    }
+
+    .avatar{
+        width:82px;
+        height:82px;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    h1{
+        font-size:12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <!-- TOP BAR -->
+
+    <div class="top">
+
+        <div class="logo">
+            ⛏ BLOCKREALM
+        </div>
+
+        <a href="/profile">
+            ← PROFILE
+        </a>
+
+    </div>
+
+
+    <!-- MAIN PANEL -->
+
+    <div class="panel">
+
+        <h1>
+            EDIT PROFILE
+        </h1>
+
+
+        <!-- AVATAR -->
+
+        <div class="avatar-row">
+
+            <div class="avatar">
+
+                {% if user['avatar'] %}
+
+                    <img
+                        src="{{ url_for('static', filename='profile/' + user['avatar']) }}"
+                        alt="Profile Picture"
+                    >
+
+                {% else %}
+
+                    <span>👤</span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="avatar-info">
+
+                <div class="avatar-name">
+                    {{ user['name'] }}
+                </div>
+
+                <div class="avatar-hint">
+                    Change your player picture below.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE PICTURE -->
+
+        <div class="section">
+
+            <div class="section-title">
+                PROFILE PICTURE
+            </div>
+
+
+            <form
+                method="POST"
+                action="/profile/avatar"
+                enctype="multipart/form-data"
+            >
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <input
+                    type="file"
+                    name="avatar"
+                    accept="image/png,image/jpeg,image/webp"
+                    required
+                >
+
+                <div class="hint">
+                    PNG, JPG, JPEG or WEBP
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn upload"
+                >
+                    📷 UPLOAD DP
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- PROFILE INFORMATION -->
+
+        <div class="section">
+
+            <div class="section-title">
+                PLAYER INFORMATION
+            </div>
+
+
+            <form
+                method="POST"
+                action="/profile/edit"
+            >
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <label for="name">
+                    USERNAME
+                </label>
+
+                <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    value="{{ user['name'] }}"
+                    maxlength="50"
+                    required
+                >
+
+                <div class="hint">
+                    This is your Blockrealm username.
+                </div>
+
+
+                <label for="age">
+                    AGE
+                </label>
+
+                <input
+                    id="age"
+                    type="number"
+                    name="age"
+                    value="{{ user['age'] or '' }}"
+                    min="1"
+                    max="120"
+                >
+
+
+                <label for="bio">
+                    BIO
+                </label>
+
+                <textarea
+                    id="bio"
+                    name="bio"
+                    maxlength="500"
+                    placeholder="Write something about yourself..."
+                >{{ user['bio'] or '' }}</textarea>
+
+                <div class="hint">
+                    Maximum 500 characters.
+                </div>
+
+
+                <div class="buttons">
+
+                    <a
+                        href="/profile"
+                        class="btn cancel"
+                    >
+                        CANCEL
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn save"
+                    >
+                        💾 SAVE CHANGES
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        BLOCKREALM • MINECRAFT REELS
+    </div>
+
+</div>
+
+</body>
+</html>

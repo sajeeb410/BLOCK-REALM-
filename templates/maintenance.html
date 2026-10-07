@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Blockrealm - Maintenance</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            background:
+                linear-gradient(#78c8f0 0%, #b9e7ff 58%, #7fc75a 58%, #5b9d3d 100%);
+            font-family: monospace;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cloud {
+            position: absolute;
+            width: 180px;
+            height: 45px;
+            background: rgba(255,255,255,.8);
+            border-radius: 30px;
+            animation: moveCloud 18s linear infinite;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: "";
+            position: absolute;
+            background: rgba(255,255,255,.8);
+            border-radius: 50%;
+        }
+
+        .cloud::before {
+            width: 70px;
+            height: 70px;
+            left: 30px;
+            bottom: 0;
+        }
+
+        .cloud::after {
+            width: 90px;
+            height: 90px;
+            right: 25px;
+            bottom: 0;
+        }
+
+        .cloud.one {
+            top: 15%;
+            left: -220px;
+        }
+
+        .cloud.two {
+            top: 30%;
+            left: -400px;
+            transform: scale(.7);
+            animation-delay: -8s;
+        }
+
+        @keyframes moveCloud {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 500px)); }
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 42%;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    #654321 0,
+                    #654321 48px,
+                    #57391c 48px,
+                    #57391c 96px
+                );
+            border-top: 24px solid #4caf32;
+        }
+
+        .panel {
+            position: relative;
+            z-index: 5;
+            width: min(90%, 650px);
+            padding: 42px 28px;
+            text-align: center;
+            background: rgba(25, 25, 25, .94);
+            border: 6px solid #111;
+            box-shadow: 12px 12px 0 rgba(0,0,0,.45);
+        }
+
+        .pickaxe {
+            font-size: 72px;
+            animation: swing 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes swing {
+            from { transform: rotate(-12deg); }
+            to { transform: rotate(12deg); }
+        }
+
+        h1 {
+            margin: 15px 0;
+            font-size: clamp(22px, 5vw, 38px);
+            text-shadow: 4px 4px #000;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #ddd;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 18px;
+            background: #6b4b2a;
+            border: 4px solid #111;
+            box-shadow: 5px 5px 0 #000;
+            font-weight: bold;
+        }
+
+        .dots::after {
+            content: "";
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0% { content: ""; }
+            25% { content: "."; }
+            50% { content: ".."; }
+            75%, 100% { content: "..."; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cloud one"></div>
+    <div class="cloud two"></div>
+    <div class="ground"></div>
+
+    <main class="panel">
+        <div class="pickaxe">⛏️</div>
+
+        <h1>BLOCKREALM IS UNDER MAINTENANCE</h1>
+
+        <p>
+            Our world is currently being worked on.
+            Please come back soon.
+        </p>
+
+        <div class="status">
+            🛠️ MAINTENANCE IN PROGRESS<span class="dots"></span>
+        </div>
+    </main>
+</body>
+</html>

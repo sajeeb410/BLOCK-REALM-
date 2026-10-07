@@ -1,0 +1,44 @@
+.env
+*.db
+*.sqlite
+*.sqlite3
+app.py.before_secret_key_upgrade
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Local database
+database.db
+database.db.*
+
+# Uploaded videos
+videos/
+
+# Project backups
+*.backup
+*.zip
+app.py.*
+*_backup.py
+*_backup.txt
+templates.before_csrf_fix/
+
+
+app_backup_before_upload.py
+chat_route.txt
+create_admin.py
+
+# Template backups
+templates/**/*.before*
+templates/**/*.backup*
+templates/**/*_backup*
+templates/*.before*
+templates/*.backup*
+templates/*_backup*
+
+
+*.working
+*.namefix*

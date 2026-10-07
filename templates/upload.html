@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Video</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "VT323", monospace;
+            background:
+                linear-gradient(
+                    rgba(70, 120, 40, 0.35),
+                    rgba(70, 120, 40, 0.35)
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    #5b3a1e 0px,
+                    #5b3a1e 32px,
+                    #6b4725 32px,
+                    #6b4725 64px
+                );
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .top {
+            max-width: 600px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-family: "Press Start 2P", cursive;
+            font-size: 15px;
+            text-shadow: 3px 3px #222;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #3f3f3f;
+            border: 3px solid #222;
+            padding: 10px 14px;
+            box-shadow: 4px 4px #171717;
+        }
+
+        .panel {
+            max-width: 600px;
+            margin: auto;
+            background: #2b2b2f;
+            border: 5px solid #171717;
+            box-shadow:
+                7px 7px #111,
+                inset 0 0 0 3px #555;
+            padding: 25px;
+        }
+
+        h1 {
+            font-family: "Press Start 2P", cursive;
+            font-size: 18px;
+            text-align: center;
+            margin: 5px 0 25px;
+            text-shadow: 3px 3px #111;
+        }
+
+        label {
+            display: block;
+            font-size: 22px;
+            margin: 18px 0 7px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 13px;
+            background: #171717;
+            color: white;
+            border: 3px solid #666;
+            font-family: "VT323", monospace;
+            font-size: 20px;
+        }
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        .upload-button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 16px;
+            border: 4px solid #222;
+            background: #5da130;
+            color: white;
+            font-family: "Press Start 2P", cursive;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 5px 5px #171717;
+        }
+
+        .upload-button:hover {
+            background: #7bc043;
+        }
+
+        .note {
+            margin-top: 18px;
+            color: #bbb;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        @media (max-width: 500px) {
+            .panel {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 14px;
+            }
+
+            .logo {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top">
+        <div class="logo">BLOCKREALM</div>
+
+        <a href="/" class="back">
+            ← HOME
+        </a>
+    </div>
+
+    <div class="panel">
+
+        <h1>UPLOAD VIDEO</h1>
+
+        <form
+            method="POST"
+            action="/upload"
+            enctype="multipart/form-data"
+        >
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label for="title">
+                Video Title
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Enter video title..."
+                maxlength="150"
+            >
+
+            <label for="video">
+                Select Video
+            </label>
+
+            <input
+                type="file"
+                id="video"
+                name="video"
+                accept="video/mp4,video/webm,video/quicktime,video/x-matroska"
+                required
+            >
+
+            <button
+                type="submit"
+                class="upload-button"
+            >
+                ⬆ UPLOAD VIDEO
+            </button>
+
+        </form>
+
+        <div class="note">
+            Supported: MP4 · WEBM · MOV · MKV
+        </div>
+
+    </div>
+
+</body>
+</html>

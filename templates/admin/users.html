@@ -1,0 +1,563 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex, nofollow">
+
+<title>Blockrealm Users</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet">
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+
+        background:
+            radial-gradient(
+                circle at 50% 15%,
+                #30234a 0%,
+                #15151b 45%,
+                #07040c 100%
+            );
+
+        color: #f3f1f8;
+        font-family: 'VT323', monospace;
+        padding: 30px;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .title {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 18px;
+        color: #ffcc33;
+        text-shadow: 3px 3px 0 #7c1c10;
+    }
+
+    .admin {
+        font-size: 22px;
+        color: #b9b2cc;
+        margin-top: 12px;
+    }
+
+    .back {
+        padding: 12px 16px;
+        background: #1b1428;
+        border: 3px solid #3d2d63;
+        color: #f3f1f8;
+        text-decoration: none;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+        box-shadow: 4px 4px 0 #07040c;
+    }
+
+    .back:hover {
+        border-color: #ffcc33;
+        color: #ffcc33;
+    }
+
+    .restricted {
+        text-align: center;
+        padding: 12px;
+        margin-bottom: 30px;
+
+        background:
+            repeating-linear-gradient(
+                135deg,
+                #ffcc33 0px,
+                #ffcc33 18px,
+                #161616 18px,
+                #161616 36px
+            );
+
+        color: #111;
+
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+
+        border: 4px solid #07040c;
+    }
+
+    .panel {
+        background: #1b1428;
+        border: 4px solid #3d2d63;
+        box-shadow: 7px 7px 0 #07040c;
+        overflow-x: auto;
+    }
+
+    .panel-title {
+        padding: 20px;
+
+        border-bottom: 4px solid #07040c;
+
+        font-family: 'Press Start 2P', monospace;
+        font-size: 14px;
+
+        color: #6bdc3b;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 650px;
+    }
+
+    th {
+        background: #07040c;
+        color: #ffcc33;
+        padding: 16px;
+        text-align: left;
+
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+    }
+
+    td {
+        padding: 15px;
+
+        border-bottom: 2px solid #3d2d63;
+
+        font-size: 21px;
+        color: #f3f1f8;
+    }
+
+    tr:hover td {
+        background: #30234a;
+    }
+
+    .id {
+        color: #b9b2cc;
+    }
+
+    .username {
+        color: #6bdc3b;
+        font-weight: bold;
+    }
+
+    .age {
+        color: #ffcc33;
+    }
+
+    .date {
+        color: #b9b2cc;
+    }
+
+    .status,
+    .role {
+        white-space: nowrap;
+        font-weight: bold;
+    }
+
+    .active {
+        color: #6bdc3b;
+    }
+
+    .banned {
+        color: #ff5555;
+    }
+
+    .manager {
+        color: #55ccff;
+    }
+
+    .normal-role {
+        color: #b9b2cc;
+    }
+
+    .actions {
+        white-space: nowrap;
+    }
+
+    .action-button {
+        border: 3px solid #07040c;
+        padding: 9px 12px;
+        margin: 3px;
+        color: #ffffff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 #07040c;
+    }
+
+    .action-button:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 4px 4px 0 #07040c;
+    }
+
+    .ban-button {
+        background: #8b2020;
+    }
+
+    .unban-button {
+        background: #287a32;
+    }
+
+    .manager-button {
+        background: #245f91;
+    }
+
+    .remove-manager-button {
+        background: #55505f;
+    }
+
+    .action-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.78);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .action-modal.show {
+        display: flex;
+    }
+
+    .action-box {
+        width: min(90%, 430px);
+        padding: 28px;
+        background: #1b1428;
+        border: 4px solid #3d2d63;
+        box-shadow:
+            0 0 0 4px #07040c,
+            9px 9px 0 #07040c;
+        text-align: center;
+    }
+
+    .action-title {
+        color: #ffcc33;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        text-shadow: 3px 3px 0 #7c1c10;
+    }
+
+    .action-text {
+        color: #f3f1f8;
+        font-size: 21px;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+
+    .action-actions {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .modal-button {
+        border: 3px solid #07040c;
+        padding: 11px 18px;
+        min-width: 120px;
+        color: #ffffff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 #07040c;
+    }
+
+    .modal-button:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 5px 5px 0 #07040c;
+    }
+
+    .cancel-button {
+        background: #55505f;
+    }
+
+    .confirm-button {
+        background: #8b2020;
+    }
+
+    .confirm-button:hover {
+        background: #b52b2b;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 50px;
+
+        font-size: 24px;
+        color: #b9b2cc;
+    }
+
+    @media (max-width: 700px) {
+
+        body {
+            padding: 15px;
+        }
+
+        .top {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 14px;
+        }
+
+        .back {
+            text-align: center;
+        }
+    }
+
+</style>
+
+</head><body><div class="container"><div class="top">
+
+    <div>
+
+        <div class="title">
+            BLOCKREALM
+        </div>
+
+        <div class="admin">
+            Admin: {{ admin_username }}
+        </div>
+
+    </div>
+
+    <a class="back" href="/admin">
+        ← DASHBOARD
+    </a>
+
+</div>
+
+
+<div class="restricted">
+    ⚠ USER DATABASE ⚠
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-title">
+        👥 REGISTERED USERS
+    </div>
+
+
+    {% if users %}
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>USERNAME</th>
+                <th>AGE</th>
+                <th>STATUS</th>
+                <th>ROLE</th>
+                <th>JOINED</th>
+                <th>ACTIONS</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td class="id">
+                    #{{ user["id"] }}
+                </td>
+
+                <td class="username">
+                    {{ user["name"] }}
+                </td>
+
+                <td class="age">
+                    {{ user["age"] }}
+                </td>
+
+                <td class="status">
+                    {% if user["status"] == "banned" %}
+                        <span class="banned">🔴 BANNED</span>
+                    {% else %}
+                        <span class="active">🟢 ACTIVE</span>
+                    {% endif %}
+                </td>
+
+                <td class="role">
+                    {% if user["role"] == "manager" %}
+                        <span class="manager">🛡️ MANAGER</span>
+                    {% else %}
+                        <span class="normal-role">👤 USER</span>
+                    {% endif %}
+                </td>
+
+                <td class="date">
+                    {{ user["created_at"] }}
+                </td>
+
+                <td class="actions">
+
+                    {% if user["status"] == "banned" %}
+
+                        <form method="POST"
+                              action="/admin/users/{{ user["id"] }}/unban"
+                              style="display:inline;">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="button"
+                                    class="action-button unban-button"
+                                    onclick="openActionModal(this.form, '✅ UNBAN USER?', 'Are you sure you want to unban this user?')">
+                                ✅ UNBAN
+                            </button>
+                        </form>
+
+                    {% else %}
+
+                        <form method="POST"
+                              action="/admin/users/{{ user["id"] }}/ban"
+                              style="display:inline;">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="button"
+                                    class="action-button ban-button"
+                                    onclick="openActionModal(this.form, '⚠ BAN USER?', 'Are you sure you want to ban this user?')">
+                                🚫 BAN
+                            </button>
+                        </form>
+
+                    {% endif %}
+
+
+                    {% if user["role"] == "manager" %}
+
+                        <form method="POST"
+                              action="/admin/users/{{ user["id"] }}/remove-manager"
+                              style="display:inline;">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="button"
+                                    class="action-button remove-manager-button"
+                                    onclick="openActionModal(this.form, '👤 REMOVE MANAGER?', 'Are you sure you want to remove manager role from this user?')">
+                                👤 REMOVE MANAGER
+                            </button>
+                        </form>
+
+                    {% else %}
+
+                        <form method="POST"
+                              action="/admin/users/{{ user["id"] }}/manager"
+                              style="display:inline;">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="button"
+                                    class="action-button manager-button"
+                                    onclick="openActionModal(this.form, '🛡️ MAKE MANAGER?', 'Are you sure you want to make this user a manager?')">
+                                🛡️ MAKE MANAGER
+                            </button>
+                        </form>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    {% else %}
+
+    <div class="empty">
+        No registered users yet.
+    </div>
+
+    {% endif %}
+
+</div>
+
+</div>
+<div id="actionModal" class="action-modal">
+
+    <div class="action-box">
+
+        <div id="actionTitle" class="action-title">
+            ⚠ CONFIRM ACTION
+        </div>
+
+        <div id="actionText" class="action-text">
+            Are you sure?
+        </div>
+
+        <div class="action-actions">
+
+            <button type="button"
+                    class="modal-button cancel-button"
+                    onclick="closeActionModal()">
+                CANCEL
+            </button>
+
+            <button type="button"
+                    class="modal-button confirm-button"
+                    onclick="confirmAction()">
+                CONFIRM
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let selectedActionForm = null;
+
+function openActionModal(form, title, message) {
+
+    selectedActionForm = form;
+
+    document.getElementById("actionTitle").textContent = title;
+    document.getElementById("actionText").textContent = message;
+
+    document.getElementById("actionModal").classList.add("show");
+}
+
+function closeActionModal() {
+
+    selectedActionForm = null;
+
+    document.getElementById("actionModal").classList.remove("show");
+}
+
+function confirmAction() {
+
+    if (selectedActionForm) {
+        selectedActionForm.submit();
+    }
+
+}
+
+</script>
+
+</body></html>

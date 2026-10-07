@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>{{ user["name"] }} - Minecraft Reels</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --dirt:#5b3a1e;
+    --grass:#5da130;
+    --grass-hi:#7bc043;
+    --stone:#8b8b8b;
+    --slate:#2b2b2f;
+    --slate2:#373737;
+    --hi:#ffffff;
+    --lo:#171717;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100dvh;
+
+    background:
+        linear-gradient(
+            var(--grass) 0 56px,
+            transparent 56px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            #6b4423 0 32px,
+            #5b3a1e 32px 64px
+        );
+
+    background-attachment:fixed;
+
+    color:#fff;
+
+    font-family:'VT323',monospace;
+    font-size:22px;
+
+    padding:
+        calc(env(safe-area-inset-top,0px) + 16px)
+        14px
+        calc(env(safe-area-inset-bottom,0px) + 40px);
+}
+
+.wrap{
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
+}
+
+/* TOP */
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.logo{
+    font-family:'Press Start 2P',monospace;
+    font-size:11px;
+    text-shadow:2px 2px 0 #000;
+}
+
+.top a{
+    color:#fff;
+    text-decoration:none;
+    text-shadow:2px 2px 0 #000;
+    font-size:22px;
+}
+
+/* MAIN PROFILE */
+
+.profile-panel{
+    background:var(--slate);
+
+    border:
+        4px solid var(--hi);
+
+    box-shadow:
+        0 0 0 4px #000,
+        8px 8px 0 rgba(0,0,0,.65);
+
+    overflow:hidden;
+}
+
+/* BANNER */
+
+.banner{
+    height:125px;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.12),
+            rgba(0,0,0,.55)
+        ),
+        repeating-linear-gradient(
+            90deg,
+            #4d8b28 0 32px,
+            #5da130 32px 64px
+        );
+
+    border-bottom:5px solid #171717;
+
+    position:relative;
+}
+
+.banner::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:18px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #704522 0 32px,
+            #5b3a1e 32px 64px
+        );
+}
+
+/* PROFILE CONTENT */
+
+.content{
+    padding:0 18px 24px;
+}
+
+/* AVATAR */
+
+.avatar-wrap{
+    margin-top:-52px;
+    position:relative;
+    width:108px;
+    height:108px;
+}
+
+.avatar{
+    width:108px;
+    height:108px;
+
+    background:#202020;
+
+    border:
+        5px solid #fff;
+
+    box-shadow:
+        5px 5px 0 #000;
+
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:55px;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* ONLINE BLOCK */
+
+.status{
+    position:absolute;
+    right:-7px;
+    bottom:-7px;
+
+    background:#3f8526;
+
+    border:3px solid #fff;
+
+    padding:4px 7px;
+
+    font-family:'Press Start 2P',monospace;
+    font-size:7px;
+
+    box-shadow:3px 3px 0 #000;
+}
+
+/* NAME */
+
+.username{
+    margin-top:18px;
+
+    font-family:'Press Start 2P',monospace;
+
+    font-size:18px;
+    line-height:1.5;
+
+    text-shadow:
+        3px 3px 0 #000;
+
+    word-break:break-word;
+}
+
+.age{
+    margin-top:7px;
+    color:#c9c9c9;
+}
+
+/* BIO */
+
+.bio{
+    margin-top:18px;
+
+    padding:14px;
+
+    background:#202024;
+
+    border:
+        3px solid #111;
+
+    box-shadow:
+        inset 3px 3px 0 #444,
+        3px 3px 0 #000;
+
+    line-height:1.35;
+}
+
+.bio-title{
+    font-family:'Press Start 2P',monospace;
+    font-size:9px;
+    margin-bottom:9px;
+}
+
+.bio-text{
+    color:#ddd;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+
+    margin-top:18px;
+}
+
+.stat{
+    background:#202024;
+
+    border:
+        3px solid #111;
+
+    padding:13px 5px;
+
+    text-align:center;
+
+    box-shadow:
+        3px 3px 0 #000;
+}
+
+.stat-number{
+    display:block;
+
+    font-family:'Press Start 2P',monospace;
+    font-size:15px;
+
+    margin-bottom:8px;
+}
+
+.stat-label{
+    display:block;
+
+    font-size:18px;
+    color:#aaa;
+}
+
+/* BUTTONS */
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+
+    margin-top:20px;
+}
+
+.button{
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    min-height:46px;
+
+    padding:9px;
+
+    background:#5b5b5b;
+
+    border:
+        3px solid #fff;
+
+    box-shadow:
+        4px 4px 0 #000;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-family:'Press Start 2P',monospace;
+    font-size:8px;
+
+    text-align:center;
+}
+
+.button:hover{
+    background:#707070;
+    transform:translate(1px,1px);
+    box-shadow:3px 3px 0 #000;
+}
+
+.home{
+    background:#3f8526;
+}
+
+.home:hover{
+    background:#5da130;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:22px;
+
+    text-align:center;
+
+    color:#d0d0d0;
+
+    font-size:17px;
+
+    text-shadow:2px 2px 0 #000;
+}
+
+/* MOBILE */
+
+@media(max-width:380px){
+
+    .username{
+        font-size:15px;
+    }
+
+    .stats{
+        gap:5px;
+    }
+
+    .stat-number{
+        font-size:12px;
+    }
+
+    .button{
+        font-size:7px;
+    }
+}
+
+.delete-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-modal.show {
+    display: flex;
+}
+
+.delete-box {
+    width: min(90%, 420px);
+    padding: 28px;
+    background: #3b3b3b;
+    border: 4px solid #1f1f1f;
+    box-shadow: 0 0 0 4px #777, 0 12px 35px rgba(0,0,0,0.7);
+    text-align: center;
+    image-rendering: pixelated;
+}
+
+.delete-title {
+    color: #ff5555;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+    text-shadow: 2px 2px #1a1a1a;
+}
+
+.delete-text {
+    color: #eee;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.delete-actions .button {
+    cursor: pointer;
+    min-width: 110px;
+}
+
+.cancel-delete {
+    background: #555 !important;
+}
+
+.confirm-delete {
+    background: #8b2020 !important;
+}
+
+.confirm-delete:hover {
+    background: #b52b2b !important;
+}
+.video-stats {
+    display: flex;
+    gap: 12px;
+    margin-top: 7px;
+    color: #aaa;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.video-stats span {
+    white-space: nowrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <!-- TOP -->
+
+    <div class="top">
+
+        <div class="logo">
+            ⛏ BLOCKREALM
+        </div>
+
+        <a href="/">
+            ← HOME
+        </a>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <main class="profile-panel">
+
+        <div class="banner"></div>
+
+
+        <div class="content">
+
+            <!-- AVATAR -->
+
+            <div class="avatar-wrap">
+
+                <div class="avatar">
+
+                    {% if user["avatar"] %}
+
+                        <img
+                            src="{{ url_for('static', filename='profile/' + user['avatar']) }}"
+                            alt="Profile Picture"
+                        >
+
+                    {% else %}
+
+                        👤
+
+                    {% endif %}
+
+                </div>
+
+                <div class="status">
+                    ONLINE
+                </div>
+
+            </div>
+
+
+            <!-- NAME -->
+
+            <div class="username">
+                {{ user["name"] }}
+            </div>
+
+
+            {% if user["age"] %}
+
+                <div class="age">
+                    AGE: {{ user["age"] }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- BIO -->
+
+            <div class="bio">
+
+                <div class="bio-title">
+                    ABOUT PLAYER
+                </div>
+
+                <div class="bio-text">
+
+                    {% if user["bio"] %}
+
+                        {{ user["bio"] }}
+
+                    {% else %}
+
+                        No bio yet...
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <span class="stat-number">
+                        {{ video_count }}
+                    </span>
+
+                    <span class="stat-label">
+                        VIDEOS
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span class="stat-number">
+                        {{ like_count }}
+                    </span>
+
+                    <span class="stat-label">
+                        LIKES
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span class="stat-number">
+                        {{ view_count }}
+                    </span>
+
+                    <span class="stat-label">
+                        VIEWS
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MY VIDEOS -->
+
+            <div class="bio">
+
+                <div class="bio-title">
+                    🎬 MY VIDEOS
+                </div>
+
+                {% if my_videos %}
+                    {% for video in my_videos %}
+                        <div class="activity-item">
+                            <div class="activity-icon">🎥</div>
+                            <div class="activity-info">
+                                <div class="activity-title">{{ video["title"] }}</div>
+
+                                <div class="activity-time">
+                                    🕐 {{ video["created_at"] }}
+                                </div>
+
+                                <div class="video-stats">
+                                    <span>👁 {{ video["view_count"] }}</span>
+                                    <span>❤️ {{ video["like_count"] }}</span>
+                                    <span>💬 {{ video["comment_count"] }}</span>
+                                </div>
+
+                            </div>
+
+                            <a href="/watch/{{ video["filename"] }}" class="button">
+                                ▶ WATCH
+                            </a>
+
+                            <form method="POST" action="/delete-video/{{ video["id"] }}" style="display:inline;">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="button" onclick="openDeleteModal(this.form); return false;">
+                                    🗑 DELETE
+                                </button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="bio-text">
+                        No videos uploaded yet.
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <a
+                    href="/profile/edit"
+                    class="button"
+                >
+                    ⚙ EDIT
+                </a>
+
+                <a
+                    href="/upload"
+                    class="button"
+                >
+                    🎬 UPLOAD VIDEO
+                </a>
+
+                <a
+                    href="/"
+                    class="button home"
+                >
+                    🏠 HOME
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <div class="footer">
+        BLOCKREALM • MINECRAFT REELS
+    </div>
+
+</div>
+
+<div id="deleteModal" class="delete-modal">
+    <div class="delete-box">
+        <div class="delete-title">⚠ DELETE VIDEO?</div>
+        <div class="delete-text">Are you sure you want to delete this video?</div>
+        <div class="delete-actions">
+            <button type="button" class="button cancel-delete" onclick="closeDeleteModal()">CANCEL</button>
+            <button type="button" class="button confirm-delete" onclick="confirmDelete()">🗑 DELETE</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let deleteForm = null;
+
+function openDeleteModal(form) {
+    deleteForm = form;
+    document.getElementById("deleteModal").classList.add("show");
+}
+
+function closeDeleteModal() {
+    deleteForm = null;
+    document.getElementById("deleteModal").classList.remove("show");
+}
+
+function confirmDelete() {
+    if (deleteForm) {
+        deleteForm.submit();
+    }
+}
+</script>
+</body>
+</html>

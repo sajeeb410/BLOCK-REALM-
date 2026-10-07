@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <title>Blockrealm Login</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        :root {
+
+            --sky: #6fb4f0;
+            --sky-low: #b5dcf8;
+
+            --grass: #5fa832;
+            --grass-dark: #39751e;
+
+            --dirt: #7a4e2d;
+            --dirt-dark: #57351f;
+
+            --stone: #6b6b6b;
+            --stone-hi: #a8a8a8;
+            --stone-lo: #3b3b3b;
+
+            --ink: #161616;
+            --paper: #f5f5f5;
+
+            --gold: #ffcc33;
+            --lime: #6bdc3b;
+            --lime-dark: #3f9d20;
+
+            --font-display:
+                "Press Start 2P",
+                "Courier New",
+                monospace;
+
+            --font-body:
+                "VT323",
+                "Courier New",
+                monospace;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    var(--sky) 0%,
+                    var(--sky) 55%,
+                    var(--sky-low) 100%
+                );
+
+            color: var(--paper);
+
+            font-family: var(--font-body);
+        }
+
+
+        /* =========================
+           SKY
+        ========================= */
+
+        .sky {
+
+            position: fixed;
+
+            inset: 0;
+
+            overflow: hidden;
+
+            z-index: 0;
+        }
+
+
+        /* =========================
+           CLOUDS
+        ========================= */
+
+        .cloud {
+
+            position: absolute;
+
+            height: 30px;
+
+            background: rgba(255,255,255,0.9);
+
+            box-shadow:
+                0 8px 0 rgba(255,255,255,0.8);
+        }
+
+
+        .cloud::before,
+        .cloud::after {
+
+            content: "";
+
+            position: absolute;
+
+            background: rgba(255,255,255,0.9);
+        }
+
+
+        .cloud::before {
+
+            width: 55px;
+            height: 35px;
+
+            left: 20px;
+            bottom: 10px;
+        }
+
+
+        .cloud::after {
+
+            width: 75px;
+            height: 40px;
+
+            left: 55px;
+            bottom: 5px;
+        }
+
+
+        .cloud-1 {
+
+            width: 130px;
+
+            top: 14%;
+
+            left: -160px;
+
+            animation:
+                moveCloud 35s linear infinite;
+        }
+
+
+        .cloud-2 {
+
+            width: 100px;
+
+            top: 27%;
+
+            left: -140px;
+
+            opacity: 0.75;
+
+            transform: scale(0.8);
+
+            animation:
+                moveCloud 48s linear infinite;
+
+            animation-delay: 8s;
+        }
+
+
+        .cloud-3 {
+
+            width: 150px;
+
+            top: 8%;
+
+            left: -180px;
+
+            opacity: 0.6;
+
+            transform: scale(0.7);
+
+            animation:
+                moveCloud 55s linear infinite;
+
+            animation-delay: 18s;
+        }
+
+
+        @keyframes moveCloud {
+
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(
+                    calc(100vw + 400px)
+                );
+            }
+        }
+
+
+        /* =========================
+           GROUND
+        ========================= */
+
+        .ground {
+
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 28vh;
+
+            min-height: 150px;
+
+            background:
+
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(0,0,0,0.08) 0,
+                    rgba(0,0,0,0.08) 4px,
+                    transparent 4px,
+                    transparent 34px
+                ),
+
+                var(--dirt);
+
+            border-top:
+                18px solid var(--grass);
+
+            box-shadow:
+                inset 0 8px 0 var(--grass-dark);
+
+            z-index: 1;
+        }
+
+
+        /* Dirt pixels */
+
+        .ground::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 30px 0 0;
+
+            background:
+
+                radial-gradient(
+                    circle at 20px 20px,
+                    rgba(0,0,0,0.18) 0 5px,
+                    transparent 6px
+                ),
+
+                radial-gradient(
+                    circle at 80px 65px,
+                    rgba(0,0,0,0.16) 0 7px,
+                    transparent 8px
+                );
+
+            background-size:
+                120px 100px,
+                160px 130px;
+
+            opacity: 0.6;
+        }
+
+
+        /* =========================
+           LOGIN PANEL
+        ========================= */
+
+        .login-panel {
+
+            position: relative;
+
+            z-index: 5;
+
+            width: min(
+                440px,
+                calc(100vw - 32px)
+            );
+
+            padding: 30px;
+
+            background: var(--stone);
+
+            border:
+
+                5px solid var(--stone-lo);
+
+            box-shadow:
+
+                inset 5px 5px 0 var(--stone-hi),
+
+                inset -5px -5px 0 #222,
+
+                10px 10px 0 rgba(0,0,0,0.35);
+        }
+
+
+        .panel-wrapper {
+
+            position: fixed;
+
+            inset: 0;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            z-index: 4;
+
+            padding-bottom: 8vh;
+        }
+
+
+        /* =========================
+           TITLE
+        ========================= */
+
+        .logo {
+
+            text-align: center;
+
+            margin-bottom: 28px;
+        }
+
+
+        .logo h1 {
+
+            margin: 0;
+
+            font-family: var(--font-display);
+
+            font-size: clamp(
+                18px,
+                4vw,
+                28px
+            );
+
+            line-height: 1.7;
+
+            color: white;
+
+            text-shadow:
+
+                4px 4px 0 #222,
+
+                7px 7px 0 rgba(0,0,0,0.25);
+        }
+
+
+        .logo p {
+
+            margin: 10px 0 0;
+
+            font-size: 25px;
+
+            color: #e5e5e5;
+        }
+
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        .field {
+
+            margin-bottom: 20px;
+        }
+
+
+        .field label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-family: var(--font-display);
+
+            font-size: 11px;
+
+            color: white;
+
+            text-shadow:
+                2px 2px 0 #333;
+        }
+
+
+        .field input {
+
+            width: 100%;
+
+            height: 52px;
+
+            padding: 10px 14px;
+
+            border:
+
+                4px solid #252525;
+
+            background: #111;
+
+            color: white;
+
+            outline: none;
+
+            font-family: var(--font-body);
+
+            font-size: 25px;
+
+            box-shadow:
+
+                inset 3px 3px 0 #000,
+
+                inset -3px -3px 0 #333;
+        }
+
+
+        .field input:focus {
+
+            border-color: var(--gold);
+
+            box-shadow:
+
+                inset 3px 3px 0 #000,
+
+                inset -3px -3px 0 #333,
+
+                0 0 0 2px #ffe477;
+        }
+
+
+        .field input::placeholder {
+
+            color: #777;
+        }
+
+
+        /* =========================
+           LOGIN BUTTON
+        ========================= */
+
+        .login-button {
+
+            width: 100%;
+
+            min-height: 58px;
+
+            border:
+
+                4px solid #245d16;
+
+            background:
+
+                linear-gradient(
+                    #75df45 0%,
+                    #55b92d 50%,
+                    #3d9620 100%
+                );
+
+            color: white;
+
+            font-family: var(--font-display);
+
+            font-size: 13px;
+
+            text-shadow:
+
+                3px 3px 0 #246314;
+
+            cursor: pointer;
+
+            box-shadow:
+
+                inset 4px 4px 0 rgba(255,255,255,0.25),
+
+                inset -4px -4px 0 rgba(0,0,0,0.25);
+        }
+
+
+        .login-button:hover {
+
+            filter: brightness(1.12);
+        }
+
+
+        .login-button:active {
+
+            transform: translateY(3px);
+
+            box-shadow:
+
+                inset 4px 4px 0 rgba(0,0,0,0.25);
+        }
+
+
+        /* =========================
+           REGISTER
+        ========================= */
+
+        .login-error {
+            margin-bottom: 18px;
+            padding: 12px 14px;
+
+            background: #4a1515;
+            border: 3px solid #8b2020;
+
+            color: #ff7777;
+
+            font-family: var(--font-display);
+            font-size: 9px;
+            line-height: 1.7;
+
+            text-align: center;
+
+            box-shadow:
+                4px 4px 0 #161616;
+
+            text-shadow:
+                2px 2px 0 #161616;
+        }
+
+
+        .register {
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top:
+
+                3px solid var(--stone-lo);
+
+            text-align: center;
+
+            font-size: 23px;
+        }
+
+
+        .register a {
+
+            display: inline-block;
+
+            margin-top: 8px;
+
+            color: var(--gold);
+
+            font-family: var(--font-display);
+
+            font-size: 10px;
+
+            text-decoration: none;
+
+            text-shadow:
+
+                2px 2px 0 #333;
+        }
+
+
+        .register a:hover {
+
+            color: #fff176;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .login-panel {
+
+                padding: 22px;
+
+                border-width: 4px;
+            }
+
+
+            .panel-wrapper {
+
+                padding-bottom: 5vh;
+            }
+
+
+            .logo h1 {
+
+                font-size: 17px;
+            }
+
+
+            .logo p {
+
+                font-size: 21px;
+            }
+
+
+            .field input {
+
+                height: 48px;
+
+                font-size: 22px;
+            }
+
+
+            .login-button {
+
+                min-height: 54px;
+
+                font-size: 11px;
+            }
+        }
+
+    
+        .password-wrap{
+            position:relative;
+            width:100%;
+        }
+
+        .password-wrap input{
+            width:100%;
+            padding-right:52px;
+            box-sizing:border-box;
+        }
+
+        .password-toggle{
+            position:absolute;
+            right:8px;
+            top:50%;
+            transform:translateY(-50%);
+            width:38px;
+            height:38px;
+            border:2px solid #555;
+            background:#222;
+            color:#fff;
+            cursor:pointer;
+            font-size:18px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .password-toggle:hover{
+            background:#333;
+            border-color:#888;
+        }
+
+</style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SKY -->
+
+    <div class="sky">
+
+        <div class="cloud cloud-1"></div>
+
+        <div class="cloud cloud-2"></div>
+
+        <div class="cloud cloud-3"></div>
+
+    </div>
+
+
+    <!-- GROUND -->
+
+    <div class="ground"></div>
+
+
+    <!-- LOGIN -->
+
+    <div class="panel-wrapper">
+
+        <main class="login-panel">
+
+
+            <div class="logo">
+
+                <h1>
+                    BLOCKREALM
+                </h1>
+
+                <p>
+                    Welcome back, player.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+                <div class="login-error">
+                    ⚠ {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+
+                <div class="field">
+
+                    <label for="name">
+                        USERNAME
+                    </label>
+
+                    <input
+                        id="name"
+                        type="text"
+                        name="name"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        value="{{ entered_name|default('') }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="password">
+                        PASSWORD
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                            aria-label="Show password"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="login-button"
+                    type="submit"
+                >
+                    LOG IN
+                </button>
+
+
+            </form>
+
+
+            <div class="register">
+
+                New player?
+
+                <br>
+
+                <a href="/register">
+                    CREATE ACCOUNT
+                </a>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    const button = document.querySelector(".password-toggle");
+
+    if (password.type === "password") {
+        password.type = "text";
+        button.textContent = "🙈";
+        button.setAttribute("aria-label", "Hide password");
+    } else {
+        password.type = "password";
+        button.textContent = "👁️";
+        button.setAttribute("aria-label", "Show password");
+    }
+}
+</script>
+
+</body>
+
+</html>

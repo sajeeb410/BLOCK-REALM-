@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Upload Video – Blockrealm</title>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+    rel="stylesheet"
+>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.55),
+            rgba(0,0,0,.75)
+        ),
+        #29170d;
+
+    color:white;
+
+    font-family:'VT323',monospace;
+
+}
+
+.container{
+
+    width:min(600px,92%);
+
+    background:#242428;
+
+    border:6px solid #111;
+
+    box-shadow:
+
+        inset 5px 5px 0 #555,
+
+        inset -5px -5px 0 #111,
+
+        8px 8px 0 #000;
+
+    padding:25px;
+
+}
+
+h1{
+
+    font-family:'Press Start 2P',monospace;
+
+    font-size:16px;
+
+    margin:0 0 25px;
+
+    text-shadow:
+        3px 3px 0 #000;
+
+}
+
+label{
+
+    display:block;
+
+    margin:15px 0 7px;
+
+    font-size:21px;
+
+}
+
+input[type="text"],
+input[type="file"]{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#111;
+
+    color:white;
+
+    border:4px solid #555;
+
+    font-family:'VT323',monospace;
+
+    font-size:20px;
+
+}
+
+input[type="file"]{
+
+    padding:10px;
+
+}
+
+button{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:14px;
+
+    background:#5da130;
+
+    color:white;
+
+    border:5px solid #31571b;
+
+    font-family:'Press Start 2P',monospace;
+
+    font-size:11px;
+
+    cursor:pointer;
+
+    box-shadow:
+        4px 4px 0 #111;
+
+}
+
+button:hover{
+
+    background:#7bc043;
+
+}
+
+.back{
+
+    display:block;
+
+    margin-top:18px;
+
+    text-align:center;
+
+    color:#aaa;
+
+    text-decoration:none;
+
+    font-size:20px;
+
+}
+
+.info{
+
+    margin-top:15px;
+
+    color:#aaa;
+
+    font-size:18px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>UPLOAD VIDEO</h1>
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+    >
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>
+            Video Title
+        </label>
+
+        <input
+            type="text"
+            name="title"
+            placeholder="Enter video title"
+            required
+        >
+
+
+        <label>
+            Video File
+        </label>
+
+        <input
+            type="file"
+            name="video"
+            accept=".mp4,.webm,.mov,.mkv"
+            required
+        >
+
+
+        <div class="info">
+            Supported: MP4, WEBM, MOV, MKV
+        </div>
+
+
+        <button type="submit">
+            ⬆ UPLOAD VIDEO
+        </button>
+
+    </form>
+
+
+    <a
+        href="/admin/videos"
+        class="back"
+    >
+        ← BACK TO VIDEOS
+    </a>
+
+</div>
+
+</body>
+
+</html>

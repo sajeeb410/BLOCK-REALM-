@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Blockrealm Village</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+}
+
+body{
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#101713;
+    color:#fff;
+}
+
+/* =========================
+   WORLD
+========================= */
+
+.world{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 28%,
+            rgba(255,202,105,.16),
+            transparent 30%
+        ),
+        linear-gradient(#3b2b21 0 65%,#241a13 65%);
+}
+
+
+/* =========================
+   V3 LIGHTING & DEPTH
+========================= */
+
+/* warm room illumination */
+.world::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 30%,
+            rgba(255,190,75,.16) 0%,
+            rgba(255,160,45,.07) 28%,
+            transparent 58%
+        ),
+        radial-gradient(
+            ellipse at 18% 50%,
+            rgba(255,155,45,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            ellipse at 82% 50%,
+            rgba(255,155,45,.10),
+            transparent 30%
+        );
+
+    mix-blend-mode:screen;
+}
+
+/* dark corners = more depth */
+.world::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 45%,
+            rgba(0,0,0,.18) 72%,
+            rgba(0,0,0,.48) 100%
+        );
+}
+
+/* stronger wooden depth */
+.wall{
+    box-shadow:
+        inset 0 -12px #342317,
+        inset 0 10px rgba(255,220,160,.07),
+        inset 35px 0 55px rgba(0,0,0,.12),
+        inset -35px 0 55px rgba(0,0,0,.12);
+}
+
+/* floor depth */
+.floor{
+    box-shadow:
+        inset 0 18px 25px rgba(0,0,0,.30),
+        inset 0 -35px 55px rgba(0,0,0,.22);
+}
+
+/* furniture contact shadows */
+.tv-link,
+.chest-link,
+.crafting-link{
+    filter:
+        drop-shadow(0 18px 12px rgba(0,0,0,.38));
+}
+
+/* TV screen glow */
+.tv::before{
+    box-shadow:
+        0 0 22px rgba(70,180,190,.12);
+}
+
+/* chest warm highlight */
+.chest{
+    filter:
+        drop-shadow(0 0 8px rgba(255,184,67,.08));
+}
+
+/* crafting table depth */
+.crafting{
+    filter:
+        drop-shadow(0 16px 12px rgba(0,0,0,.35));
+}
+
+/* rug contact shadow */
+.rug{
+    box-shadow:
+        inset 0 0 0 4px #d07843,
+        0 15px 25px rgba(0,0,0,.45);
+}
+
+/* lantern light pools */
+.lantern.left{
+    filter:
+        drop-shadow(0 0 18px rgba(255,175,45,.65));
+}
+
+.lantern.right{
+    filter:
+        drop-shadow(0 0 18px rgba(255,175,45,.65));
+}
+
+/* fireplace glow */
+.fireplace-glow{
+    position:absolute;
+    left:50%;
+    top:55%;
+    width:280px;
+    height:180px;
+    transform:translate(-50%,-50%);
+    z-index:4;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255,120,25,.22),
+            rgba(255,100,20,.08) 35%,
+            transparent 72%
+        );
+
+    filter:blur(12px);
+    animation:fireGlow 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes fireGlow{
+    from{
+        opacity:.65;
+        transform:translate(-50%,-50%) scale(.95);
+    }
+    to{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1.06);
+    }
+}
+
+/* gentle floating dust in lantern light */
+.dust{
+    position:absolute;
+    width:3px;
+    height:3px;
+    border-radius:50%;
+    background:rgba(255,220,150,.35);
+    z-index:18;
+    pointer-events:none;
+
+    animation:dustFloat 5s linear infinite;
+}
+
+.dust.one{left:28%;top:42%}
+.dust.two{left:34%;top:55%;animation-delay:1s}
+.dust.three{right:30%;top:40%;animation-delay:2s}
+.dust.four{right:37%;top:58%;animation-delay:3s}
+
+@keyframes dustFloat{
+    0%{
+        transform:translateY(20px);
+        opacity:0;
+    }
+    25%{
+        opacity:.8;
+    }
+    75%{
+        opacity:.5;
+    }
+    100%{
+        transform:translateY(-55px);
+        opacity:0;
+    }
+}
+
+/* =========================
+   WOOD WALL
+========================= */
+
+.wall{
+    position:absolute;
+    inset:0 0 31% 0;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(48,29,16,.28) 0 5px,
+            transparent 5px 63px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(40,24,12,.18) 0 5px,
+            transparent 5px 90px
+        ),
+        linear-gradient(#805b38,#68472b);
+
+    box-shadow:
+        inset 0 -12px #342317,
+        inset 0 10px rgba(255,220,160,.06);
+}
+
+/* wood beam */
+
+.beam{
+    position:absolute;
+    z-index:8;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #402718 0 32px,
+            #50321e 32px 37px
+        );
+
+    box-shadow:
+        inset 0 0 0 4px #624027,
+        0 8px 18px rgba(0,0,0,.45);
+}
+
+.beam.top{
+    left:0;
+    right:0;
+    top:7%;
+    height:36px;
+}
+
+.beam.left{
+    left:7%;
+    top:0;
+    width:38px;
+    height:72%;
+}
+
+.beam.right{
+    right:7%;
+    top:0;
+    width:38px;
+    height:72%;
+}
+
+/* =========================
+   WINDOWS
+========================= */
+
+.window{
+    position:absolute;
+    top:18%;
+    width:175px;
+    height:145px;
+
+    border:13px solid #422a19;
+
+    background:
+        linear-gradient(
+            #405e71,
+            #6c9270 65%,
+            #344c2e
+        );
+
+    box-shadow:
+        inset 0 0 0 5px #765034,
+        0 14px 30px rgba(0,0,0,.45);
+
+    z-index:4;
+}
+
+.window.left{
+    left:11%;
+}
+
+.window.right{
+    right:11%;
+}
+
+/* village outside */
+
+.window::before{
+    content:"";
+    position:absolute;
+    left:15px;
+    right:15px;
+    bottom:0;
+    height:45%;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 0 38%,
+            #6a472c 39% 52%,
+            transparent 53%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 0 42%,
+            #765033 43% 58%,
+            transparent 59%
+        ),
+        #355234;
+}
+
+/* window bars */
+
+.window::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent 47%,
+            #422a19 48% 52%,
+            transparent 53%
+        ),
+        linear-gradient(
+            0deg,
+            transparent 47%,
+            #422a19 48% 52%,
+            transparent 53%
+        );
+}
+
+/* =========================
+   LANTERNS
+========================= */
+
+.lantern{
+    position:absolute;
+    top:11%;
+    width:31px;
+    height:49px;
+    z-index:15;
+
+    background:#20150e;
+    border:5px solid #392316;
+
+    box-shadow:
+        0 0 8px #ffb12f,
+        0 0 28px rgba(255,174,40,.55);
+}
+
+.lantern::before{
+    content:"";
+    position:absolute;
+    inset:7px 5px;
+
+    background:#ffb52e;
+
+    box-shadow:
+        inset 0 0 8px #fff1a0,
+        0 0 14px #ffc04b;
+}
+
+.lantern::after{
+    content:"";
+    position:absolute;
+    width:19px;
+    height:9px;
+    top:-13px;
+    left:1px;
+
+    border:4px solid #29180e;
+    border-bottom:0;
+}
+
+.lantern.left{
+    left:25%;
+}
+
+.lantern.right{
+    right:25%;
+}
+
+/* =========================
+   CEILING LIGHT
+========================= */
+
+.ceiling-light{
+    position:absolute;
+    left:50%;
+    top:0;
+    transform:translateX(-50%);
+    z-index:20;
+
+    width:100px;
+    height:20px;
+
+    background:#3b2617;
+    border:5px solid #21150d;
+}
+
+.ceiling-light::after{
+    content:"";
+    position:absolute;
+    width:42px;
+    height:42px;
+    left:50%;
+    top:15px;
+    transform:translateX(-50%);
+
+    background:#ffb52e;
+
+    border:7px solid #342116;
+
+    box-shadow:
+        0 0 30px rgba(255,180,45,.8);
+}
+
+/* =========================
+   TITLE SIGN
+========================= */
+
+.sign{
+    position:absolute;
+    left:50%;
+    top:9%;
+    transform:translateX(-50%);
+    z-index:30;
+
+    min-width:230px;
+    padding:13px 25px;
+
+    text-align:center;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #704521 0 25px,
+            #80532b 25px 30px
+        );
+
+    border:7px solid #392418;
+
+    box-shadow:
+        inset 0 0 0 3px #9a6736,
+        0 12px 25px rgba(0,0,0,.45);
+}
+
+.sign h1{
+    font-size:28px;
+    letter-spacing:4px;
+    color:#ffe4a6;
+
+    text-shadow:
+        3px 3px #3a2517;
+}
+
+.sign span{
+    display:block;
+    margin-top:4px;
+    font-size:9px;
+    letter-spacing:4px;
+    color:#d9b97b;
+}
+
+/* =========================
+   FLOOR
+========================= */
+
+.floor{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:33%;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #50331e 0 83px,
+            #684329 83px 88px
+        );
+
+    border-top:12px solid #302016;
+
+    transform:perspective(500px) rotateX(2deg);
+    transform-origin:bottom;
+}
+
+.floor::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 53px,
+            rgba(30,17,8,.25) 54px 59px
+        );
+}
+
+/* =========================
+   RUG
+========================= */
+
+.rug{
+    position:absolute;
+    left:50%;
+    bottom:7%;
+    transform:translateX(-50%);
+
+    width:42%;
+    height:12%;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #8b3025 0 34px,
+            #b55a32 34px 40px
+        );
+
+    border:9px solid #432419;
+
+    box-shadow:
+        inset 0 0 0 4px #d07843,
+        0 12px 20px rgba(0,0,0,.35);
+
+    z-index:5;
+}
+
+/* =========================
+   MAIN FURNITURE AREA
+========================= */
+
+.furniture{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:18%;
+    height:42%;
+    z-index:30;
+}
+
+/* =========================
+   TV
+========================= */
+
+.tv-link{
+    position:absolute;
+    left:9%;
+    bottom:0;
+
+    width:290px;
+
+    text-decoration:none;
+    color:white;
+
+    transition:.2s;
+}
+
+.tv-link:hover{
+    transform:translateY(-9px);
+}
+
+.tv{
+    position:relative;
+    width:290px;
+    height:190px;
+
+    background:#1d1c19;
+
+    border:15px solid #32251a;
+    border-radius:6px;
+
+    box-shadow:
+        inset 0 0 0 5px #5a3d25,
+        0 18px 30px rgba(0,0,0,.6);
+}
+
+.tv::before{
+    content:"";
+
+    position:absolute;
+    inset:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            #213d42,
+            #101d20
+        );
+
+    border:5px solid #111719;
+}
+
+.tv::after{
+    content:"▶";
+
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+
+    font-size:44px;
+    color:#dcefc8;
+
+    text-shadow:
+        0 0 12px #78d27b;
+}
+
+.tv-stand{
+    position:relative;
+    width:340px;
+    height:80px;
+    left:-25px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #59351e 0 42px,
+            #70462a 42px 48px
+        );
+
+    border:10px solid #352216;
+
+    box-shadow:
+        inset 0 0 0 4px #88572f,
+        0 14px 25px rgba(0,0,0,.55);
+}
+
+.tv-stand::before,
+.tv-stand::after{
+    content:"";
+
+    position:absolute;
+    bottom:-45px;
+
+    width:42px;
+    height:45px;
+
+    background:#382419;
+}
+
+.tv-stand::before{
+    left:25px;
+}
+
+.tv-stand::after{
+    right:25px;
+}
+
+.object-label{
+    margin-top:13px;
+
+    text-align:center;
+
+    font-weight:900;
+    font-size:12px;
+    letter-spacing:3px;
+
+    color:#ffe3a4;
+
+    text-shadow:
+        3px 3px #352216;
+}
+
+/* =========================
+   CHEST
+========================= */
+
+.chest-link{
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+
+    width:240px;
+
+    text-decoration:none;
+    color:white;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.chest-link:hover{
+    transform:translateX(-50%) translateY(-9px);
+}
+
+.chest{
+    position:relative;
+
+    width:220px;
+    height:150px;
+
+    margin:auto;
+}
+
+.chest-body{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:105px;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #8c5a27 0 28px,
+            #71451f 28px 34px
+        );
+
+    border:10px solid #392519;
+
+    box-shadow:
+        inset 0 0 0 4px #b07838,
+        0 18px 28px rgba(0,0,0,.55);
+}
+
+.chest-lid{
+    position:absolute;
+    left:0;
+    right:0;
+    top:5px;
+
+    height:70px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #74481f 0 8%,
+            #a56c2f 8% 92%,
+            #74481f 92%
+        );
+
+    border:10px solid #392519;
+
+    transform-origin:bottom center;
+
+    transition:.55s cubic-bezier(.2,.8,.2,1);
+
+    z-index:3;
+
+    box-shadow:
+        inset 0 0 0 4px #b47a3a;
+}
+
+.chest-lock{
+    position:absolute;
+    z-index:8;
+
+    left:50%;
+    top:82px;
+
+    transform:translateX(-50%);
+
+    width:32px;
+    height:38px;
+
+    background:#d7a03c;
+
+    border:5px solid #62451f;
+
+    transition:.25s;
+}
+
+.chest.opening .chest-lid{
+    transform:perspective(300px) rotateX(-115deg);
+}
+
+.chest.opening .chest-lock{
+    transform:translateX(-50%) translateY(12px);
+    opacity:.3;
+}
+
+.chest-glow{
+    position:absolute;
+    left:50%;
+    top:62px;
+
+    width:90px;
+    height:50px;
+
+    transform:translateX(-50%);
+
+    background:#ffe47a;
+
+    opacity:0;
+
+    filter:blur(12px);
+
+    transition:.4s;
+}
+
+.chest.opening .chest-glow{
+    opacity:.8;
+}
+
+/* =========================
+   CRAFTING TABLE
+========================= */
+
+.crafting-link{
+    position:absolute;
+    right:9%;
+    bottom:0;
+
+    width:270px;
+
+    text-decoration:none;
+    color:white;
+
+    transition:.2s;
+}
+
+.crafting-link:hover{
+    transform:translateY(-9px);
+}
+
+.crafting{
+    position:relative;
+
+    width:235px;
+    height:175px;
+
+    margin:auto;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #9a6a3c 0 27px,
+            #79502c 27px 33px
+        );
+
+    border:12px solid #302016;
+
+    box-shadow:
+        inset 0 0 0 5px #b47c45,
+        0 18px 30px rgba(0,0,0,.6);
+}
+
+/* top surface */
+
+.crafting::before{
+    content:"";
+
+    position:absolute;
+
+    left:-12px;
+    right:-12px;
+    top:-30px;
+
+    height:55px;
+
+    background:
+        linear-gradient(
+            45deg,
+            transparent 42%,
+            #56341e 43% 50%,
+            transparent 51%
+        ),
+        linear-gradient(
+            -45deg,
+            transparent 42%,
+            #56341e 43% 50%,
+            transparent 51%
+        ),
+        #a66e3d;
+
+    border:12px solid #302016;
+
+    box-shadow:
+        inset 0 0 0 4px #c08449;
+}
+
+/* table front details */
+
+.crafting::after{
+    content:"";
+
+    position:absolute;
+    left:25px;
+    right:25px;
+    top:42px;
+    height:90px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent 28%,
+            #4c2e1b 29% 34%,
+            transparent 35% 65%,
+            #4c2e1b 66% 71%,
+            transparent 72%
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 27px,
+            #57351e 28px 33px
+        );
+}
+
+/* =========================
+   CHEST SOUND / INTERACTION
+========================= */
+
+.interact{
+    position:absolute;
+    left:50%;
+    bottom:2%;
+
+    transform:translateX(-50%);
+
+    z-index:80;
+
+    font-size:9px;
+    letter-spacing:2px;
+
+    color:#bfa477;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    position:absolute;
+    left:50%;
+    bottom:2%;
+
+    transform:translateX(-50%);
+
+    z-index:50;
+
+    padding:7px 14px;
+
+    background:#3c2719;
+    border:4px solid #24170e;
+
+    color:#cba875;
+
+    font-size:9px;
+    letter-spacing:2px;
+
+    white-space:nowrap;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:850px){
+
+    .beam.left{left:2%}
+    .beam.right{right:2%}
+
+    .window{
+        width:105px;
+        height:92px;
+        border-width:8px;
+        top:17%;
+    }
+
+    .window.left{left:4%}
+    .window.right{right:4%}
+
+    .sign{
+        top:5%;
+        min-width:190px;
+        padding:9px 14px;
+    }
+
+    .sign h1{
+        font-size:19px;
+        letter-spacing:3px;
+    }
+
+    .sign span{
+        font-size:7px;
+        letter-spacing:2px;
+    }
+
+    .lantern{
+        transform:scale(.7);
+    }
+
+    .lantern.left{left:22%}
+    .lantern.right{right:22%}
+
+    .furniture{
+        bottom:21%;
+        height:35%;
+    }
+
+    .tv-link{
+        left:1%;
+        width:115px;
+    }
+
+    .tv{
+        width:115px;
+        height:78px;
+        border-width:7px;
+    }
+
+    .tv::before{
+        inset:5px;
+        border-width:2px;
+    }
+
+    .tv::after{
+        font-size:19px;
+    }
+
+    .tv-stand{
+        width:125px;
+        height:35px;
+        left:-5px;
+        border-width:5px;
+    }
+
+    .tv-stand::before,
+    .tv-stand::after{
+        display:none;
+    }
+
+    .chest-link{
+        width:105px;
+    }
+
+    .chest{
+        width:105px;
+        height:85px;
+    }
+
+    .chest-body{
+        height:60px;
+        border-width:6px;
+    }
+
+    .chest-lid{
+        height:42px;
+        border-width:6px;
+    }
+
+    .chest-lock{
+        top:43px;
+        width:19px;
+        height:23px;
+        border-width:3px;
+    }
+
+    .crafting-link{
+        right:1%;
+        width:115px;
+    }
+
+    .crafting{
+        width:110px;
+        height:85px;
+        border-width:7px;
+    }
+
+    .crafting::before{
+        left:-7px;
+        right:-7px;
+        top:-17px;
+        height:28px;
+        border-width:7px;
+    }
+
+    .crafting::after{
+        left:10px;
+        right:10px;
+        top:21px;
+        height:47px;
+    }
+
+    .object-label{
+        font-size:7px;
+        letter-spacing:1px;
+        margin-top:5px;
+    }
+
+    .rug{
+        width:58%;
+        height:9%;
+        bottom:7%;
+    }
+
+    .footer{
+        font-size:6px;
+        letter-spacing:1px;
+        padding:5px 7px;
+    }
+}
+
+@media(max-height:650px){
+
+    .furniture{
+        bottom:17%;
+        transform:scale(.82);
+        transform-origin:bottom center;
+    }
+
+    .window{
+        top:14%;
+        transform:scale(.8);
+    }
+
+    .sign{
+        top:3%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="world">
+
+    <div class="wall"></div>
+
+    <div class="floor"></div>
+
+    <div class="beam top"></div>
+    <div class="beam left"></div>
+    <div class="beam right"></div>
+
+    <div class="window left"></div>
+    <div class="window right"></div>
+
+    <div class="lantern left"></div>
+    <div class="lantern right"></div>
+
+    <div class="ceiling-light"></div>
+    <div class="fireplace-glow"></div>
+
+    <div class="dust one"></div>
+    <div class="dust two"></div>
+    <div class="dust three"></div>
+    <div class="dust four"></div>
+
+
+    <div class="sign">
+        <h1>BLOCKREALM</h1>
+        <span>VILLAGE HUB</span>
+    </div>
+
+    <div class="rug"></div>
+
+    <div class="furniture">
+
+        <!-- TV -->
+        <a href="/" class="tv-link">
+            <div class="tv"></div>
+            <div class="tv-stand"></div>
+            <div class="object-label">
+                📺 WATCH VIDEOS
+            </div>
+        </a>
+
+        <!-- CHEST -->
+        <a href="/photos" class="chest-link" id="chestLink">
+
+            <div class="chest" id="photoChest">
+
+                <div class="chest-glow"></div>
+
+                <div class="chest-body"></div>
+
+                <div class="chest-lid"></div>
+
+                <div class="chest-lock"></div>
+
+            </div>
+
+            <div class="object-label">
+                📦 PHOTO CHEST
+            </div>
+
+        </a>
+
+        <!-- CRAFTING TABLE -->
+        <a href="/tools" class="crafting-link">
+
+            <div class="crafting"></div>
+
+            <div class="object-label">
+                🛠 CRAFTING TABLE
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="interact">
+        SELECT AN OBJECT TO ENTER
+    </div>
+
+    <div class="footer">
+        BLOCKREALM • YOUR VILLAGE • YOUR WORLD
+    </div>
+
+</div>
+
+<script>
+
+/* =================================
+   CHEST OPENING SOUND
+================================= */
+
+function chestSound(){
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    if(!AudioContext) return;
+
+    const ctx = new AudioContext();
+
+    const now = ctx.currentTime;
+
+    /* wooden click */
+
+    const click = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+
+    click.type = "square";
+
+    click.frequency.setValueAtTime(180,now);
+    click.frequency.exponentialRampToValueAtTime(
+        85,
+        now + 0.12
+    );
+
+    clickGain.gain.setValueAtTime(.08,now);
+    clickGain.gain.exponentialRampToValueAtTime(
+        .001,
+        now + .15
+    );
+
+    click.connect(clickGain);
+    clickGain.connect(ctx.destination);
+
+    click.start(now);
+    click.stop(now + .16);
+
+    /* opening tone */
+
+    const tone = ctx.createOscillator();
+    const toneGain = ctx.createGain();
+
+    tone.type = "triangle";
+
+    tone.frequency.setValueAtTime(
+        220,
+        now + .05
+    );
+
+    tone.frequency.exponentialRampToValueAtTime(
+        430,
+        now + .35
+    );
+
+    toneGain.gain.setValueAtTime(
+        .001,
+        now + .05
+    );
+
+    toneGain.gain.exponentialRampToValueAtTime(
+        .07,
+        now + .12
+    );
+
+    toneGain.gain.exponentialRampToValueAtTime(
+        .001,
+        now + .42
+    );
+
+    tone.connect(toneGain);
+    toneGain.connect(ctx.destination);
+
+    tone.start(now + .05);
+    tone.stop(now + .45);
+
+    setTimeout(()=>{
+        ctx.close();
+    },700);
+}
+
+
+/* =================================
+   CHEST CLICK
+================================= */
+
+const chestLink =
+    document.getElementById("chestLink");
+
+const photoChest =
+    document.getElementById("photoChest");
+
+if(chestLink && photoChest){
+
+    chestLink.addEventListener(
+        "click",
+        function(event){
+
+            event.preventDefault();
+
+            chestSound();
+
+            photoChest.classList.add("opening");
+
+            setTimeout(()=>{
+                window.location.href = "/photos";
+            },700);
+
+        }
+    );
+
+    /* Reset chest whenever Hub is restored */
+    window.addEventListener("pageshow", function(){
+        photoChest.classList.remove("opening");
+    });
+
+}
+
+</script>
+
+</body>
+</html>

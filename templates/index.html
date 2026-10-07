@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<title>{{ title }} – Minecraft Reels</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+    rel="stylesheet"
+>
+
+<style>
+
+:root{
+
+    --dirt:#5b3a1e;
+    --grass:#5da130;
+    --grass-hi:#7bc043;
+
+    --stone:#8b8b8b;
+
+    --slate:#2b2b2f;
+
+    --bevel-hi:#fff;
+    --bevel-lo:#373737;
+
+    --heart:#e0272b;
+    --xp:#7ef03a;
+
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+
+    height:100%;
+
+    background:var(--slate);
+
+    color:#fff;
+
+    font-family:'VT323',monospace;
+
+    font-size:22px;
+
+    overscroll-behavior:none;
+}
+
+body{
+
+    display:flex;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            var(--slate),
+            var(--slate)
+        );
+
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app{
+
+    position:relative;
+
+    width:100%;
+
+    max-width:440px;
+
+    height:100dvh;
+
+    background:#000;
+
+    overflow:hidden;
+
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.bar{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    z-index:10;
+
+    padding:
+        calc(env(safe-area-inset-top,0px) + 8px)
+        12px
+        8px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:
+        linear-gradient(
+            #000a,
+            #0000
+        );
+
+    pointer-events:none;
+
+}
+
+.logo{
+
+    font-family:'Press Start 2P',monospace;
+
+    font-size:12px;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.logo i{
+
+    width:18px;
+
+    height:18px;
+
+    display:block;
+
+    background:
+        linear-gradient(
+            var(--grass) 0 40%,
+            var(--dirt) 40% 100%
+        );
+
+    box-shadow:
+
+        inset -2px -2px 0 #0004,
+
+        inset 2px 2px 0 #fff3;
+
+}
+
+.bar a{
+
+    pointer-events:auto;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-size:20px;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+}
+
+
+/* =====================================================
+   FEED
+===================================================== */
+
+.feed{
+
+    height:100%;
+
+    overflow-y:scroll;
+
+    scroll-snap-type:y mandatory;
+
+    scrollbar-width:none;
+
+}
+
+.feed::-webkit-scrollbar{
+    display:none;
+}
+
+
+/* =====================================================
+   REEL
+===================================================== */
+
+.reel{
+
+    position:relative;
+
+    height:100dvh;
+
+    scroll-snap-align:start;
+
+    scroll-snap-stop:always;
+
+    overflow:hidden;
+
+    background:var(--dirt);
+
+}
+
+
+/* =====================================================
+   VIDEO
+===================================================== */
+
+.reel video{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+    background:#1a1208;
+
+}
+
+
+/* =====================================================
+   VIDEO SHADE
+===================================================== */
+
+.shade{
+
+    position:absolute;
+
+    inset:auto 0 0 0;
+
+    height:48%;
+
+    background:
+        linear-gradient(
+            #0000,
+            #000d
+        );
+
+    pointer-events:none;
+
+}
+
+
+/* =====================================================
+   TOP VIDEO GRADIENT
+===================================================== */
+
+.top-shade{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    top:0;
+
+    height:22%;
+
+    background:
+        linear-gradient(
+            #000b,
+            #0000
+        );
+
+    pointer-events:none;
+
+}
+
+
+/* =====================================================
+   VIDEO INFO
+===================================================== */
+
+.info{
+
+    position:absolute;
+
+    left:12px;
+
+    right:88px;
+
+    bottom:
+        calc(
+            env(safe-area-inset-bottom,0px)
+            + 28px
+        );
+
+    text-shadow:
+        2px 2px 0 #000;
+
+    pointer-events:none;
+
+}
+
+.user{
+
+    font-family:'Press Start 2P',monospace;
+
+    font-size:11px;
+
+    margin-bottom:8px;
+
+    color:var(--grass-hi);
+
+}
+
+.cap{
+
+    font-size:22px;
+
+    line-height:1.1;
+
+    max-width:34ch;
+
+    margin-bottom:7px;
+
+}
+
+.meta{
+
+    color:#ddd;
+
+    font-size:18px;
+
+}
+
+
+/* =====================================================
+   INVENTORY ACTION RAIL
+===================================================== */
+
+.rail{
+
+    position:absolute;
+
+    right:10px;
+
+    bottom:
+        calc(
+            env(safe-area-inset-bottom,0px)
+            + 30px
+        );
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    align-items:center;
+
+    z-index:3;
+
+}
+
+
+/* =====================================================
+   INVENTORY SLOT
+===================================================== */
+
+.action{
+
+    width:58px;
+
+    height:58px;
+
+    border:0;
+
+    padding:0;
+
+    background:#0000;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-family:'VT323',monospace;
+
+    text-decoration:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:2px;
+
+}
+
+
+/* Minecraft-style slot */
+
+.slot{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#8b8b8b;
+
+    border:
+
+        4px solid #373737;
+
+    box-shadow:
+
+        inset 4px 4px 0 #fff8,
+
+        inset -4px -4px 0 #373737,
+
+        0 3px 0 #000;
+
+    font-size:25px;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+}
+
+.action:hover .slot{
+
+    background:#a0a0a0;
+
+}
+
+
+/* =====================================================
+   LIKE
+===================================================== */
+
+.like-form{
+
+    margin:0;
+
+    padding:0;
+
+}
+
+.like-button{
+
+    border:0;
+
+    background:none;
+
+    padding:0;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    font-family:'VT323',monospace;
+
+}
+
+.like-button.liked .slot{
+
+    background:#8b3030;
+
+    border-color:#491414;
+
+}
+
+.like-count{
+
+    font-size:17px;
+
+    line-height:15px;
+
+    text-shadow:
+        2px 2px 0 #000;
+
+}
+
+
+/* =====================================================
+   PLAYER NAME / TITLE
+===================================================== */
+
+.video-title{
+
+    font-size:24px;
+
+    line-height:1;
+
+    margin-bottom:5px;
+
+}
+
+
+/* =====================================================
+   SHARE MESSAGE
+===================================================== */
+
+.toast{
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:100px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    background:#242428;
+
+    border:
+
+        4px solid #373737;
+
+    box-shadow:
+
+        inset 3px 3px 0 #fff5,
+
+        inset -3px -3px 0 #111,
+
+        4px 4px 0 #000;
+
+    padding:8px 12px;
+
+    font-size:18px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+    z-index:20;
+
+}
+
+.toast.show{
+
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+}
+
+
+/* =====================================================
+   BOTTOM PROGRESS
+===================================================== */
+
+.progress{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:4px;
+
+    background:#0008;
+
+    z-index:5;
+
+}
+
+.progress-bar{
+
+    height:100%;
+
+    width:0;
+
+    background:var(--grass-hi);
+
+    box-shadow:
+        0 0 6px #7bc043;
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+
+    height:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    background:#151518;
+
+    text-align:center;
+
+}
+
+.empty-title{
+
+    font-family:'Press Start 2P',monospace;
+
+    font-size:12px;
+
+}
+
+.empty-sub{
+
+    color:#aaa;
+
+}
+
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+@media(min-width:441px){
+
+    .app{
+
+        box-shadow:
+            0 0 0 1px #111,
+            0 0 40px #000;
+
+    }
+
+}
+
+
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    color: #ddd;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    background: transparent;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+.profile-link:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+
+/* =====================================================
+   HOMEPAGE AJAX COMMENTS
+===================================================== */
+
+.home-comment-panel{
+    margin-top:10px;
+    width:100%;
+    max-width:420px;
+    background:rgba(0,0,0,.72);
+    border:2px solid #555;
+    padding:10px;
+    box-sizing:border-box;
+    display:none;
+}
+
+.home-comment-panel.open{
+    display:block;
+}
+
+.home-comment-form{
+    display:flex;
+    gap:6px;
+}
+
+.home-comment-form textarea{
+    flex:1;
+    min-height:42px;
+    max-height:80px;
+    resize:vertical;
+    background:#111;
+    color:#fff;
+    border:2px solid #555;
+    padding:7px;
+    font-family:'VT323',monospace;
+    font-size:18px;
+    box-sizing:border-box;
+}
+
+.home-comment-form button{
+    border:2px solid #777;
+    background:#333;
+    color:#fff;
+    padding:5px 9px;
+    cursor:pointer;
+    font-family:'VT323',monospace;
+    font-size:17px;
+}
+
+.home-comment-list{
+    margin-top:8px;
+    max-height:150px;
+    overflow-y:auto;
+}
+
+.home-comment{
+    padding:6px 0;
+    border-bottom:1px solid #444;
+    font-family:'VT323',monospace;
+}
+
+.home-comment-user{
+    color:#ffd966;
+    font-size:17px;
+}
+
+.home-comment-text{
+    color:#fff;
+    font-size:16px;
+    word-break:break-word;
+}
+
+.home-comment-time{
+    color:#888;
+    font-size:13px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =================================================
+         TOP BAR
+    ================================================== -->
+
+    <div class="bar">
+
+        <a
+            href="/"
+            class="logo"
+        >
+
+            <i></i>
+
+            BLOCKREALM
+
+        </a>
+
+
+        <a href="/">
+            🏠
+        </a>
+
+        <a href="/profile" class="profile-link">
+            👤 PROFILE
+        </a>
+
+        <a href="/chat" class="profile-link">
+            💬 CHAT
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         FEED
+    ================================================== -->
+
+    <main class="feed">
+
+
+        {% if videos %}
+
+
+            {% for video in videos %}
+
+
+            <section class="reel">
+
+
+                <!-- VIDEO -->
+
+                <video
+                    class="reel-video"
+                    playsinline
+                    preload="metadata"
+                    controls
+                >
+
+                    <source
+                        src="/videos/{{ video.filename }}"
+                        type="video/mp4"
+                    >
+
+                    Your browser does not support video.
+
+                </video>
+
+
+                <!-- DARK GRADIENT -->
+
+                <div class="top-shade"></div>
+
+                <div class="shade"></div>
+
+
+                <!-- =================================================
+                     INFORMATION
+                ================================================== -->
+
+                <div class="info">
+
+                    <div class="user">
+                        {% if video.uploaded_by_admin %}👑 ADMIN{% else %}{{ video.uploader_name or "Unknown" }}{% endif %}
+                    </div>
+
+
+                    <div class="video-title">
+
+                        {{ video.title }}
+
+                    </div>
+
+
+                    <div class="cap">
+
+                        🎮 Minecraft adventure
+
+                    </div>
+
+
+                    <div class="meta">
+
+                        📺 BLOCKREALM
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACTION RAIL
+                ================================================== -->
+
+                <div class="rail">
+
+
+                    <!-- LIKE -->
+
+                    <form
+    method="POST"
+    action="/like/{{ video.filename }}"
+    class="like-form"
+>
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <button
+        type="submit"
+        class="like-button
+        {% if video.id in user_likes %}
+            liked
+        {% endif %}"
+    >
+
+        <span class="slot">
+
+            {% if video.id in user_likes %}
+                ❤️
+            {% else %}
+                🤍
+            {% endif %}
+
+        </span>
+
+        <span class="like-count">
+
+            ❤️
+            {{ like_counts.get(video.id, 0) }}
+
+        </span>
+
+    </button>
+
+</form>
+                          
+
+
+                    <!-- COMMENT -->
+
+                    <button
+                        class="action comment-toggle"
+                        type="button"
+                        onclick="toggleHomeComment(this)"
+                    >
+
+                        <span class="slot">
+                            💬
+                        </span>
+
+                        <span>
+                            COMMENT
+                        </span>
+
+                    </button>
+
+                    <div class="home-comment-panel">
+
+                        <form
+                            method="POST"
+                            action="/comment/{{ video.filename }}"
+                            class="home-comment-form"
+                        >
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <textarea
+                                name="comment"
+                                placeholder="Write a comment..."
+                                maxlength="500"
+                                required
+                            ></textarea>
+
+                            <button type="submit">
+                                POST
+                            </button>
+
+                        </form>
+
+                        <div class="home-comment-list">
+
+                            {% for comment in comments %}
+                                {% if comment["video_id"] == video.id %}
+
+                                    <div class="home-comment">
+
+                                        <div class="home-comment-user">
+                                            👤 {{ comment["name"] }}
+                                        </div>
+
+                                        <div class="home-comment-text">
+                                            {{ comment["comment"] }}
+                                        </div>
+
+                                        <div class="home-comment-time">
+                                            {{ comment["created_at"] }}
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SHARE -->
+
+                    <button
+                        class="action"
+                        type="button"
+                        onclick="shareVideo()"
+                    >
+
+                        <span class="slot">
+                            ↗
+                        </span>
+
+                        <span>
+                            SHARE
+                        </span>
+
+                    </button>
+
+
+                    <!-- DOWNLOAD -->
+
+                    <a
+                        class="action"
+                        href="/videos/{{ video.filename }}"
+                        download
+                    >
+
+                        <span class="slot">
+                            ↓
+                        </span>
+
+                        <span>
+                            SAVE
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="progress">
+
+                    <div class="progress-bar"></div>
+
+                </div>
+
+
+            </section>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <section class="empty">
+
+                <div class="empty-title">
+                    NO VIDEOS
+                </div>
+
+                <div class="empty-sub">
+                    The village TV has no signal.
+                </div>
+
+                <a
+                    href="/"
+                    style="
+                    color:#7bc043;
+                    text-decoration:none;
+                    "
+                >
+                    🏠 BACK HOME
+                </a>
+
+            </section>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+    <!-- SHARE TOAST -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+        Link copied!
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SHARE
+===================================================== */
+
+async function shareVideo(){
+
+    const data = {
+        title: document.title,
+        text: "Watch this video on BLOCKREALM",
+        url: window.location.href
+    };
+
+    try{
+
+        if(navigator.share){
+
+            await navigator.share(data);
+
+        }else{
+
+            await navigator.clipboard.writeText(
+                window.location.href
+            );
+
+            showMessage("Link copied!");
+
+        }
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function showMessage(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(
+        () => {
+            toast.classList.remove("show");
+        },
+        1800
+    );
+
+}
+
+
+/* =====================================================
+   VIDEO AUTO PLAY / PAUSE
+===================================================== */
+
+const videos =
+    document.querySelectorAll(".reel-video");
+
+
+const observer =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                const video =
+                    entry.target;
+
+                if(entry.isIntersecting){
+
+                    video.play()
+                        .catch(() => {});
+
+                }else{
+
+                    video.pause();
+
+                }
+
+            });
+
+        },
+        {
+            threshold:0.65
+        }
+    );
+
+
+videos.forEach(video => {
+
+    observer.observe(video);
+
+});
+
+
+/* =====================================================
+   PROGRESS BAR
+===================================================== */
+
+videos.forEach(video => {
+
+    video.addEventListener(
+        "timeupdate",
+        () => {
+
+            const bar =
+                video
+                .closest(".reel")
+                .querySelector(".progress-bar");
+
+            if(
+                video.duration &&
+                !isNaN(video.duration)
+            ){
+
+                const percent =
+                    (
+                        video.currentTime /
+                        video.duration
+                    ) * 100;
+
+                bar.style.width =
+                    percent + "%";
+
+            }
+
+        }
+    );
+
+});
+
+    
+// =========================
+// AJAX LIKE — NO PAGE RELOAD
+// =========================
+
+document.querySelectorAll(".like-form").forEach(form => {
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const button = form.querySelector(".like-button");
+        const slot = form.querySelector(".slot");
+        const count = form.querySelector(".like-count");
+
+        try {
+
+            const response = await fetch(
+                form.action,
+                {
+                    method: "POST",
+                    body: new FormData(form),
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Like request failed");
+            }
+
+            const data = await response.json();
+
+            slot.textContent = data.liked ? "❤️" : "🤍";
+
+            count.textContent = "❤️ " + data.count;
+
+            button.classList.toggle(
+                "liked",
+                data.liked
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Like error:",
+                error
+            );
+
+        }
+
+    });
+
+});
+
+
+// =========================
+// HOMEPAGE AJAX COMMENTS
+// =========================
+
+function toggleHomeComment(button) {
+
+    const panel = button.nextElementSibling;
+
+    if (panel) {
+        panel.classList.toggle("open");
+    }
+
+}
+
+
+document.querySelectorAll(".home-comment-form").forEach(form => {
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const textarea = form.querySelector(
+            'textarea[name="comment"]'
+        );
+
+        const button = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        const list = form.parentElement.querySelector(
+            ".home-comment-list"
+        );
+
+        const text = textarea.value.trim();
+
+        if (!text) {
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+
+            const response = await fetch(
+                form.action,
+                {
+                    method: "POST",
+                    body: new FormData(form),
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Comment request failed");
+            }
+
+            const data = await response.json();
+
+            const comment = document.createElement("div");
+            comment.className = "home-comment";
+
+            const user = document.createElement("div");
+            user.className = "home-comment-user";
+            user.textContent = "👤 " + data.name;
+
+            const commentText = document.createElement("div");
+            commentText.className = "home-comment-text";
+            commentText.textContent = data.comment;
+
+            const time = document.createElement("div");
+            time.className = "home-comment-time";
+            time.textContent = data.created_at;
+
+            comment.appendChild(user);
+            comment.appendChild(commentText);
+            comment.appendChild(time);
+
+            list.prepend(comment);
+
+            textarea.value = "";
+
+        } catch (error) {
+
+            console.error(
+                "Homepage comment error:",
+                error
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+
+
+
+
+<script>
+/* VIDEO SCROLL RESET SYSTEM */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const videos = document.querySelectorAll("video.reel-video");
+
+    videos.forEach(function (video) {
+
+        const observer = new IntersectionObserver(
+            function (entries) {
+
+                entries.forEach(function (entry) {
+
+                    /*
+                     * Video screen থেকে বের হয়ে গেলে
+                     * সাথে সাথে 0:00 এ reset হবে।
+                     */
+                    if (!entry.isIntersecting) {
+
+                        video.pause();
+
+                        try {
+                            video.currentTime = 0;
+                        } catch (error) {
+                            console.log(
+                                "Could not reset video:",
+                                error
+                            );
+                        }
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.01
+            }
+        );
+
+        observer.observe(video);
+
+    });
+
+});
+</script>
+
+</body>
+
+</html>

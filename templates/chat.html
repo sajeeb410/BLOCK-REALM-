@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Village Chat Hub</title>
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    background:#5f452f;
+}
+
+/* =========================
+   MINECRAFT HOUSE
+========================= */
+
+.room{
+    position:fixed;
+    inset:0;
+    z-index:-10;
+    overflow:hidden;
+}
+
+.wall{
+    position:absolute;
+    inset:0 0 25% 0;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #795a3c 0 61px,
+            #5e442e 61px 65px
+        );
+}
+
+.wall:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 62px,
+            rgba(0,0,0,.12) 62px 65px
+        );
+}
+
+.floor{
+    position:absolute;
+    left:-5%;
+    right:-5%;
+    bottom:-4%;
+    height:30%;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #704f32 0 62px,
+            #4b3322 62px 66px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            #704f32 0 62px,
+            #4b3322 62px 66px
+        );
+    transform:perspective(500px) rotateX(8deg);
+    transform-origin:bottom;
+}
+
+/* Lantern */
+
+.lantern{
+    position:fixed;
+    top:27px;
+    width:25px;
+    height:32px;
+    background:#302923;
+    border:3px solid #17130f;
+    box-shadow:
+        0 0 25px rgba(255,180,60,.75),
+        0 0 60px rgba(255,140,20,.25);
+    z-index:-2;
+}
+
+.lantern:before{
+    content:"";
+    position:absolute;
+    width:10px;
+    height:17px;
+    left:4px;
+    top:4px;
+    background:#ffd36b;
+    box-shadow:0 0 18px #ffad28;
+}
+
+.lantern:after{
+    content:"";
+    position:absolute;
+    width:12px;
+    height:5px;
+    left:3px;
+    top:-9px;
+    border:3px solid #17130f;
+}
+
+.lantern.left{left:8%}
+.lantern.right{right:8%}
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+    width:min(1050px,94%);
+    margin:auto;
+    padding:28px 0 50px;
+}
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+
+    padding:14px 16px;
+    margin-bottom:20px;
+
+    background:
+        linear-gradient(
+            #735235,
+            #4b3524
+        );
+
+    border:4px solid #241a12;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.12),
+        inset -4px -4px rgba(0,0,0,.30),
+        0 8px 0 #2b1e15,
+        0 18px 30px rgba(0,0,0,.45);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-icon{
+    width:50px;
+    height:50px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #916b43,
+            #503a27
+        );
+
+    border:4px solid #21170f;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.12),
+        inset -3px -3px rgba(0,0,0,.30);
+}
+
+.brand-text h1{
+    margin:0;
+    font-size:24px;
+    letter-spacing:1px;
+    text-shadow:3px 3px #251910;
+}
+
+.brand-text p{
+    margin:3px 0 0;
+    color:#d4bea0;
+    font-size:11px;
+}
+
+.online{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    padding:8px 11px;
+
+    background:#2b2119;
+    border:3px solid #19120d;
+
+    color:#d8f5cf;
+    font-size:11px;
+}
+
+.online-dot{
+    width:10px;
+    height:10px;
+
+    background:#55d63e;
+    border:2px solid #1e4317;
+
+    box-shadow:0 0 8px #55d63e;
+}
+
+/* =========================
+   CHAT BOARD
+========================= */
+
+.chat-board{
+    padding:12px;
+
+    background:#3d2b1e;
+
+    border:5px solid #241a12;
+
+    box-shadow:
+        inset 3px 3px rgba(255,255,255,.08),
+        inset -5px -5px rgba(0,0,0,.35),
+        0 10px 0 #261b14,
+        0 20px 35px rgba(0,0,0,.5);
+}
+
+/* Wooden sign title */
+
+.board-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+
+    padding:13px 15px;
+    margin-bottom:13px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #805d3a 0 58px,
+            #69492d 58px 61px
+        );
+
+    border:4px solid #251a12;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.12),
+        inset -3px -3px rgba(0,0,0,.25);
+}
+
+.board-title h2{
+    margin:0;
+    font-size:16px;
+    text-shadow:2px 2px #2a1c12;
+}
+
+.board-title span{
+    color:#d6bd9b;
+    font-size:10px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    padding:10px 12px;
+    margin-bottom:13px;
+
+    background:#272019;
+
+    border:4px solid #17120e;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.04);
+}
+
+.search-icon{
+    font-size:18px;
+}
+
+.search input{
+    width:100%;
+
+    border:0;
+    outline:0;
+
+    background:transparent;
+
+    color:#fff;
+    font-size:14px;
+}
+
+.search input::placeholder{
+    color:#99856d;
+}
+
+/* =========================
+   USERS
+========================= */
+
+.users{
+    display:grid;
+    gap:8px;
+}
+
+.user-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    min-height:74px;
+
+    padding:9px 11px;
+
+    text-decoration:none;
+    color:#fff;
+
+    background:
+        linear-gradient(
+            90deg,
+            #60462e,
+            #493423
+        );
+
+    border:4px solid #241a12;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.08),
+        inset -3px -3px rgba(0,0,0,.25);
+
+    transition:
+        transform .12s ease,
+        filter .12s ease,
+        border-color .12s ease;
+}
+
+.user-card:hover{
+    filter:brightness(1.12);
+    transform:translateY(-2px);
+}
+
+.user-card:active{
+    transform:translateY(2px);
+}
+
+.user-card.has-unread{
+    border-color:#714b29;
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+.avatar-frame{
+    position:relative;
+
+    flex:0 0 52px;
+
+    width:52px;
+    height:52px;
+
+    background:#60452d;
+
+    border:4px solid #21170f;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.1),
+        inset -3px -3px rgba(0,0,0,.3);
+}
+
+.avatar{
+    display:block;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.avatar-placeholder{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #777 0 6px,
+            #666 6px 12px
+        );
+}
+
+.status{
+    position:absolute;
+
+    right:-6px;
+    bottom:-6px;
+
+    width:14px;
+    height:14px;
+
+    background:#55d63e;
+
+    border:3px solid #21170f;
+
+    box-shadow:0 0 6px rgba(85,214,62,.5);
+}
+
+/* =========================
+   USER INFO
+========================= */
+
+.user-info{
+    flex:1;
+    min-width:0;
+}
+
+.user-name{
+    font-size:15px;
+    font-weight:bold;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    text-shadow:2px 2px #261a12;
+}
+
+.last-message{
+    margin-top:5px;
+
+    color:#c6b298;
+
+    font-size:12px;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.time{
+    margin-top:4px;
+
+    color:#96816a;
+
+    font-size:10px;
+}
+
+/* =========================
+   UNREAD
+========================= */
+
+.unread{
+    min-width:25px;
+    height:25px;
+
+    padding:0 6px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            #d94a3b,
+            #8e211a
+        );
+
+    color:#fff;
+
+    border:3px solid #3b110d;
+
+    font-size:11px;
+    font-weight:bold;
+
+    text-shadow:1px 1px #4c100b;
+
+    box-shadow:
+        inset 1px 1px rgba(255,255,255,.18),
+        0 2px #1e0c09;
+}
+
+.arrow{
+    font-size:23px;
+    color:#b8986c;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    padding:48px 15px;
+
+    text-align:center;
+
+    background:#2b2119;
+
+    border:4px dashed #62462d;
+
+    color:#bca98e;
+}
+
+.empty-icon{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.empty h3{
+    margin:0 0 7px;
+    color:#eee;
+}
+
+.empty p{
+    margin:0;
+    font-size:12px;
+}
+
+/* =========================
+   BOTTOM SIGN
+========================= */
+
+.bottom-sign{
+    width:max-content;
+    max-width:90%;
+
+    margin:18px auto 0;
+
+    padding:9px 16px;
+
+    background:
+        linear-gradient(
+            #765437,
+            #4e3623
+        );
+
+    border:4px solid #241a12;
+
+    color:#d9c09d;
+
+    font-size:11px;
+    text-align:center;
+
+    box-shadow:
+        inset 2px 2px rgba(255,255,255,.1),
+        inset -2px -2px rgba(0,0,0,.3);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    .page{
+        width:96%;
+        padding-top:15px;
+    }
+
+    .topbar{
+        padding:11px;
+    }
+
+    .brand-icon{
+        width:43px;
+        height:43px;
+        font-size:21px;
+    }
+
+    .brand-text h1{
+        font-size:20px;
+    }
+
+    .brand-text p{
+        font-size:9px;
+    }
+
+    .online{
+        padding:7px;
+    }
+
+    .online span:last-child{
+        display:none;
+    }
+
+    .chat-board{
+        padding:8px;
+        border-width:4px;
+    }
+
+    .board-title{
+        padding:11px;
+    }
+
+    .board-title span{
+        display:none;
+    }
+
+    .user-card{
+        min-height:70px;
+        padding:8px;
+    }
+
+    .avatar-frame{
+        width:46px;
+        height:46px;
+        flex-basis:46px;
+    }
+
+    .user-name{
+        font-size:14px;
+    }
+
+    .last-message{
+        font-size:11px;
+    }
+
+    .arrow{
+        font-size:20px;
+    }
+
+    .bottom-sign{
+        font-size:9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="room">
+    <div class="wall"></div>
+    <div class="floor"></div>
+</div>
+
+<div class="lantern left"></div>
+<div class="lantern right"></div>
+
+<main class="page">
+
+    <!-- HEADER -->
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                💬
+            </div>
+
+            <div class="brand-text">
+
+                <h1>CHAT HUB</h1>
+
+                <p>Village Communication Center</p>
+
+            </div>
+
+        </div>
+
+        <div class="online">
+
+            <div class="online-dot"></div>
+
+            <span>ONLINE</span>
+
+        </div>
+
+    </header>
+
+
+    <!-- CHAT BOARD -->
+    <section class="chat-board">
+
+        <div class="board-title">
+
+            <h2>📜 VILLAGE MESSAGES</h2>
+
+            <span>Choose a player to chat</span>
+
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="search">
+
+            <div class="search-icon">
+                🔎
+            </div>
+
+            <input
+                type="text"
+                id="userSearch"
+                placeholder="Search villagers..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <!-- USERS -->
+        <div class="users" id="userList">
+
+            {% for user in users %}
+
+            <a
+                href="/chat/{{ user['id'] }}"
+                class="user-card {% if user['unread_count']|int > 0 %}has-unread{% endif %}"
+                data-name="{{ user['name']|lower }}"
+            >
+
+                <!-- AVATAR -->
+
+                <div class="avatar-frame">
+
+                    {% if user["avatar"] %}
+
+                    <img
+                        class="avatar"
+                        src="{{ url_for('static', filename='profile/' + user['avatar']) }}"
+                        alt="{{ user['name'] }}"
+                    >
+
+                    {% else %}
+
+                    <div class="avatar-placeholder">
+                        🧑
+                    </div>
+
+                    {% endif %}
+
+                    <div class="status"></div>
+
+                </div>
+
+
+                <!-- USER INFO -->
+
+                <div class="user-info">
+
+                    <div class="user-name">
+                        {{ user["name"] }}
+                    </div>
+
+                    <div class="last-message">
+
+                        {% if user["last_message"] %}
+
+                            {{ user["last_message"] }}
+
+                        {% else %}
+
+                            No messages yet
+
+                        {% endif %}
+
+                    </div>
+
+                    {% if user["last_message_time"] %}
+
+                    <div class="time">
+                        {{ user["last_message_time"] }}
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- UNREAD -->
+
+                <div
+                    class="unread"
+                    {% if user["unread_count"]|int == 0 %}
+                    style="display:none;"
+                    {% endif %}
+                >
+
+                    {% if user["unread_count"]|int > 0 %}
+                        {{ user["unread_count"] }}
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ARROW -->
+
+                <div class="arrow">
+                    ›
+                </div>
+
+            </a>
+
+            {% endfor %}
+
+
+            {% if users|length == 0 %}
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🏡
+                </div>
+
+                <h3>No villagers found</h3>
+
+                <p>
+                    There are no other players to chat with yet.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <div class="bottom-sign">
+        🪵 Chat safely • Respect your fellow villagers • Have fun
+    </div>
+
+</main>
+
+
+<!-- SEARCH -->
+
+<script>
+
+const searchInput =
+    document.getElementById("userSearch");
+
+const userCards =
+    document.querySelectorAll(".user-card");
+
+searchInput.addEventListener(
+    "input",
+    function(){
+
+        const query =
+            this.value
+                .toLowerCase()
+                .trim();
+
+        userCards.forEach(card => {
+
+            const name =
+                card.dataset.name || "";
+
+            card.style.display =
+                name.includes(query)
+                ? "flex"
+                : "none";
+
+        });
+
+    }
+);
+
+</script>
+
+
+<!-- LIVE UNREAD COUNTER -->
+
+<script>
+
+async function updateUnreadCounts(){
+
+    try{
+
+        const response =
+            await fetch(
+                "/chat/unread-counts",
+                {
+                    cache:"no-store"
+                }
+            );
+
+        if(!response.ok){
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        document
+            .querySelectorAll(".user-card")
+            .forEach(card => {
+
+                const href =
+                    card.getAttribute("href");
+
+                if(!href){
+                    return;
+                }
+
+                const parts =
+                    href.split("/");
+
+                const userId =
+                    parts[parts.length - 1];
+
+                const count =
+                    Number(
+                        data[userId] || 0
+                    );
+
+                const badge =
+                    card.querySelector(
+                        ".unread"
+                    );
+
+                if(!badge){
+                    return;
+                }
+
+                if(count > 0){
+
+                    badge.textContent =
+                        count;
+
+                    badge.style.display =
+                        "flex";
+
+                    card.classList.add(
+                        "has-unread"
+                    );
+
+                }else{
+
+                    badge.textContent =
+                        "";
+
+                    badge.style.display =
+                        "none";
+
+                    card.classList.remove(
+                        "has-unread"
+                    );
+
+                }
+
+            });
+
+    }catch(error){
+
+        console.log(
+            "Unread update error:",
+            error
+        );
+
+    }
+
+}
+
+updateUnreadCounts();
+
+setInterval(
+    updateUnreadCounts,
+    2000
+);
+
+</script>
+
+</body>
+</html>
