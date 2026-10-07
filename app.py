@@ -1755,14 +1755,17 @@ def hub():
     )
 
 # =========================
+# DATABASE INITIALIZATION
+# =========================
+
+init_database()
+sync_videos()
+
+# =========================
 # START SERVER
 # =========================
 
 if __name__ == "__main__":
-
-    init_database()
-    sync_videos()
-
     app.run(
         host="0.0.0.0",
         port=5000,
