@@ -1759,13 +1759,14 @@ def hub():
 # =========================
 
 init_database()
-sync_videos()
 
 # =========================
 # START SERVER
 # =========================
 
 if __name__ == "__main__":
+    sync_videos()
+
     app.run(
         host="0.0.0.0",
         port=5000,
